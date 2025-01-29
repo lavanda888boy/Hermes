@@ -1,0 +1,6 @@
+@IncidentRegistrationService_HostAddress = http://localhost:5064
+
+GET {{IncidentRegistrationService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

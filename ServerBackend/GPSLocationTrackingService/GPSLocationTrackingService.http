@@ -1,0 +1,6 @@
+@GPSLocationTrackingService_HostAddress = http://localhost:5227
+
+GET {{GPSLocationTrackingService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
