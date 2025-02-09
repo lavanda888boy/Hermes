@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GPSLocationTrackingService\GPSLocationTrackingService.csproj" />
     <ProjectReference Include="..\IncidentRegistrationService\IncidentRegistrationService.csproj" />
-    <ProjectReference Include="..\NotificationPreferenceService\NotificationPreferenceService.csproj" />
   </ItemGroup>
 
 </Project>
