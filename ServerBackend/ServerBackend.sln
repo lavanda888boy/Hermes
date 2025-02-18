@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerBackend.AppHost", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerBackend.ServiceDefaults", "ServerBackend.ServiceDefaults\ServerBackend.ServiceDefaults.csproj", "{0A0CA463-CB9A-433D-BAF8-5545BAB4504A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationPreferenceService", "NotificationPreferenceService\NotificationPreferenceService.csproj", "{9D6EE211-0D81-437E-830A-594E3C2D8131}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncidentRegistrationService", "IncidentRegistrationService\IncidentRegistrationService.csproj", "{3395E29E-4F4B-4B04-AA29-89543239DB73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSLocationTrackingService", "GPSLocationTrackingService\GPSLocationTrackingService.csproj", "{800A8554-7178-46DD-A5DC-F36053D371E8}"
@@ -26,10 +24,6 @@ Global
 		{0A0CA463-CB9A-433D-BAF8-5545BAB4504A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A0CA463-CB9A-433D-BAF8-5545BAB4504A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A0CA463-CB9A-433D-BAF8-5545BAB4504A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D6EE211-0D81-437E-830A-594E3C2D8131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D6EE211-0D81-437E-830A-594E3C2D8131}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D6EE211-0D81-437E-830A-594E3C2D8131}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D6EE211-0D81-437E-830A-594E3C2D8131}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3395E29E-4F4B-4B04-AA29-89543239DB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3395E29E-4F4B-4B04-AA29-89543239DB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3395E29E-4F4B-4B04-AA29-89543239DB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
