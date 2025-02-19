@@ -2,6 +2,7 @@ import "../global.css";
 import InitScreen from "./index.jsx";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,8 +19,10 @@ export default function App() {
   }
 
   return (
-    <>
+    <SafeAreaView
+      className="flex-1 justify-center items-center p-4"
+    >
       <InitScreen />
-    </>
+    </SafeAreaView>
   );
 }

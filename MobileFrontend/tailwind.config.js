@@ -10,6 +10,11 @@ module.exports = {
         "ops-r": ["OpenSans-Regular"],
         "ops-sb": ["OpenSans-SemiBold"],
       },
+      colors: {
+        primary: "#2196F3",  // Dark Blue
+        secondary: "#42A5F5", // Light Blue
+        light: "#BBDEFB",    // Very Light Blue
+      },
     },
   },
   plugins: [],

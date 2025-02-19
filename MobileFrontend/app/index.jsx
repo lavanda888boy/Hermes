@@ -1,14 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const InitScreen = () => {
   return (
-    <SafeAreaView>
-      <View>
-        <Text className="font-ops-it">Init Screen</Text>
-      </View>
-    </SafeAreaView>
+    <View>
+      <Text className="text-5xl text-primary font-ops-sb">Init screen</Text>
+    </View>
   );
 };
 
