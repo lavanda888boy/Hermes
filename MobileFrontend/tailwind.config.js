@@ -11,9 +11,9 @@ module.exports = {
         "ops-sb": ["OpenSans-SemiBold"],
       },
       colors: {
-        primary: "#2196F3",  // Dark Blue
-        secondary: "#42A5F5", // Light Blue
-        light: "#BBDEFB",    // Very Light Blue
+        primary: "#1976D2",  // Dark Blue
+        secondary: "#2196F3", // Light Blue
+        light: "#42A5F5",    // Very Light Blue
       },
     },
   },

@@ -19,9 +19,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView
-      className="flex-1 justify-center items-center p-4"
-    >
+    <SafeAreaView className="flex-1 justify-center p-4">
       <InitScreen />
     </SafeAreaView>
   );
