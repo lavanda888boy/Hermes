@@ -1,12 +1,26 @@
-import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
 import "../global.css";
+import InitScreen from "./index.jsx";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [isLoaded] = useFonts({
+    "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),
+    "OpenSans-Light": require("../assets/fonts/OpenSans-Light.ttf"),
+    "OpenSans-Regular": require("../assets/fonts/OpenSans-Regular.ttf"),
+    "OpenSans-SemiBold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
+  });
+
+  if (isLoaded) {
+    SplashScreen.hideAsync();
+  }
+
   return (
-    <View className="flex-1 items-center justify-center bg-red-600">
-      <Text className="text-bold">Hermes</Text>
-      <StatusBar />
-    </View>
+    <SafeAreaView className="flex-1 justify-center p-4">
+      <InitScreen />
+    </SafeAreaView>
   );
 }
