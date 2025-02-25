@@ -41,7 +41,7 @@ const InitScreen = () => {
         later change.
       </Text>
 
-      <View className="flex flex-column justify-center items-center px-2 mt-4">
+      <View className="flex flex-column justify-center items-center px-4 mt-4">
         {incidentCategories.map((category) => (
           <View key={category} className="flex flex-row items-center w-11/12 p-2">
             <Checkbox
