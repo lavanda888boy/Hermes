@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncidentRegistrationService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSLocationTrackingService", "GPSLocationTrackingService\GPSLocationTrackingService.csproj", "{800A8554-7178-46DD-A5DC-F36053D371E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationPreferencesService", "NotificationPreferencesService\NotificationPreferencesService.csproj", "{8338DCE4-E1BD-42F1-B27C-ACF2BD75A101}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIGateway", "APIGateway\APIGateway.csproj", "{D124355D-A141-4E08-BA26-DF84A501AFEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +36,19 @@ Global
 		{800A8554-7178-46DD-A5DC-F36053D371E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{800A8554-7178-46DD-A5DC-F36053D371E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{800A8554-7178-46DD-A5DC-F36053D371E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8338DCE4-E1BD-42F1-B27C-ACF2BD75A101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8338DCE4-E1BD-42F1-B27C-ACF2BD75A101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8338DCE4-E1BD-42F1-B27C-ACF2BD75A101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8338DCE4-E1BD-42F1-B27C-ACF2BD75A101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D124355D-A141-4E08-BA26-DF84A501AFEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D124355D-A141-4E08-BA26-DF84A501AFEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D124355D-A141-4E08-BA26-DF84A501AFEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D124355D-A141-4E08-BA26-DF84A501AFEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A92A3FB-C776-4FB7-9DA8-D44D0DA4378B}
 	EndGlobalSection
 EndGlobal
