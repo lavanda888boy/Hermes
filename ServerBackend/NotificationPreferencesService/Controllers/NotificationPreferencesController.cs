@@ -1,7 +1,9 @@
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using NotificationPreferencesService.Models;
+using NotificationPreferencesService.Repository;
 
 namespace NotificationPreferencesService.Controllers;
 
@@ -10,49 +12,60 @@ namespace NotificationPreferencesService.Controllers;
 public class NotificationPreferencesController : ControllerBase
 {
     private readonly FirebaseMessaging _firebaseMessaging;
+    private readonly IRepository<NotificationPreference> _notificationPreferenceRepository;
+    private readonly IRepository<DeviceTopicInfo> _deviceTopicInfoRepository;
 
-    public NotificationPreferencesController(FirebaseApp firebaseApp)
+    public NotificationPreferencesController(FirebaseApp firebaseApp, 
+        IRepository<NotificationPreference> notificationPreferenceRepository, 
+        IRepository<DeviceTopicInfo> deviceTopicInfoRepository)
     {
         _firebaseMessaging = FirebaseMessaging.GetMessaging(firebaseApp);
+        _notificationPreferenceRepository = notificationPreferenceRepository;
+        _deviceTopicInfoRepository = deviceTopicInfoRepository;
     }
 
     [HttpGet]
-    public List<string?> GetNotificationPreferencesOptions()
+    public async Task<List<string>> GetNotificationPreferenceOptions()
     {
-        return [.. typeof(NotificationPreferencesOption)
-                    .GetFields()
-                    .Select(f => f.GetValue(null)?.ToString())];
+        var preferences = await _notificationPreferenceRepository.GetAllAsync();
+        return [.. preferences.Select(p => p.PreferenceName)];
+    }
+
+    [HttpGet("{devicetoken}")]
+    public async Task<IActionResult> GetNotificationPreferencesByDeviceToken(string deviceToken)
+    {
+        var device = await _deviceTopicInfoRepository.GetByIdAsync(deviceToken);
+
+        if (device == null)
+        {
+            return BadRequest($"Device with token {deviceToken} does not exist.");
+        }
+
+        return Ok(device.SubscribedTopics);
     }
 
     [HttpPost("{deviceToken}")]
     public async Task<IActionResult> RegisterNotificationPreferences(string deviceToken, [FromBody] List<string> notificationPreferences)
     {
+        var device = await _deviceTopicInfoRepository.GetByIdAsync(deviceToken);
+
+        if (device != null)
+        {
+            return BadRequest($"Device with token {deviceToken} already exists.");
+        }
+
         if (notificationPreferences == null || notificationPreferences.Count == 0)
         {
             return BadRequest("Notification preferences list for registration is empty");
         }
 
-        List<string> validTopics = [.. typeof(NotificationPreferencesOption)
-                                         .GetFields()
-                                         .Select(f => f.GetValue(null)?.ToString())];
+        await _deviceTopicInfoRepository.AddAsync(new DeviceTopicInfo { DeviceId = deviceToken, SubscribedTopics = notificationPreferences });
+        var preferences = await _notificationPreferenceRepository.GetAllAsync();
 
-        foreach (var topic in notificationPreferences)
+        foreach (var preference in notificationPreferences)
         {
-            if (validTopics.Contains(topic))
-            {
-                try
-                {
-                    await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], SanitizeTopic(topic));
-                }
-                catch (FirebaseMessagingException ex)
-                {
-                    Console.WriteLine($"Message: {ex.Message};\nTopic: {topic}");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Subscription topic is not available: {topic}");
-            }
+            var sanitizedTopic = preferences.First(p => p.PreferenceName == preference);
+            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], sanitizedTopic.TopicName);
         }
 
         return Ok(deviceToken);
@@ -66,48 +79,33 @@ public class NotificationPreferencesController : ControllerBase
             return BadRequest("Notification preferences list for update is empty");
         }
 
-        List<string> validTopics = [.. typeof(NotificationPreferencesOption)
-                                         .GetFields()
-                                         .Select(f => f.GetValue(null)?.ToString())];
+        var device = await _deviceTopicInfoRepository.GetByIdAsync(deviceToken);
 
-        var topicsToUnsubscribe = validTopics.Except(notificationPreferences);
+        if (device == null)
+        {
+            return BadRequest($"Device with token {deviceToken} does not exist.");
+        }
+
+        var topicsToSubscribe = notificationPreferences.Except(device.SubscribedTopics);
+        var topicsToUnsubscribe = device.SubscribedTopics.Except(notificationPreferences);
+
+        device.SubscribedTopics = [.. notificationPreferences.Intersect(device.SubscribedTopics)];
+        await _deviceTopicInfoRepository.UpdateAsync(device);
+
+        var preferences = await _notificationPreferenceRepository.GetAllAsync();
+
+        foreach (var topic in topicsToSubscribe)
+        {
+            var sanitizedTopic = preferences.First(p => p.PreferenceName == topic);
+            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], sanitizedTopic.TopicName);
+        }
 
         foreach (var topic in topicsToUnsubscribe)
         {
-            try
-            {
-                await _firebaseMessaging.UnsubscribeFromTopicAsync([deviceToken], SanitizeTopic(topic));
-            }
-            catch (FirebaseMessagingException ex)
-            {
-                Console.WriteLine($"Message: {ex.Message};\nTopic: {topic}");
-            }
-        }
-
-        foreach (var topic in notificationPreferences)
-        {
-            if (validTopics.Contains(topic))
-            {
-                try
-                {
-                    await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], SanitizeTopic(topic));
-                }
-                catch (FirebaseMessagingException ex)
-                {
-                    Console.WriteLine($"Message: {ex.Message};\nTopic: {topic}");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Subscription topic is not available: {topic}");
-            }
+            var sanitizedTopic = preferences.First(p => p.PreferenceName == topic);
+            await _firebaseMessaging.UnsubscribeFromTopicAsync([deviceToken], sanitizedTopic.TopicName);
         }
 
         return Ok(deviceToken);
-    }
-
-    private static string SanitizeTopic(string topic)
-    {
-        return topic.Replace("&", "").Replace(" ", "_").ToLower();
     }
 }
