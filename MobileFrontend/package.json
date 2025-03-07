@@ -9,13 +9,16 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^21.12.0",
+    "@react-native-firebase/messaging": "^21.12.0",
+    "axios": "^1.8.1",
     "expo": "~52.0.36",
     "expo-checkbox": "~4.0.1",
-    "expo-constants": "~17.0.5",
+    "expo-constants": "~17.0.7",
     "expo-device": "~7.0.2",
     "expo-font": "~13.0.3",
     "expo-linking": "~7.0.5",
-    "expo-notifications": "~0.29.13",
+    "expo-notifications": "^0.29.13",
     "expo-router": "~4.0.17",
     "expo-splash-screen": "~0.29.22",
     "expo-status-bar": "~2.0.1",

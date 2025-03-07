@@ -3,6 +3,7 @@ import InitScreen from "./index.jsx";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useFCMToken from "../config/useFCMToken";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -14,13 +15,15 @@ export default function App() {
     "OpenSans-SemiBold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
   });
 
-  if (isLoaded) {
+  const fcmToken = useFCMToken();
+
+  if (isLoaded && fcmToken !== "") {
     SplashScreen.hideAsync();
   }
 
   return (
     <SafeAreaView className="flex-1 justify-center p-4">
-      <InitScreen />
+      <InitScreen deviceToken={fcmToken} />
     </SafeAreaView>
   );
 }

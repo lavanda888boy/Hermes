@@ -1,18 +1,25 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import Checkbox from "expo-checkbox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import notificationPreferencesApi from "../config/axios";
 
-const InitScreen = () => {
-  const incidentCategories = [
-    "Weather & Air Quality",
-    "Traffic & Transportation Updates",
-    "Infrastructure & Service Disruptions",
-    "Health & Safety Alerts",
-    "Community & Public Events"
-  ];
-
+const InitScreen = ({ deviceToken }) => {
+  const [incidentCategories, setIncidentCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchIncidentCategories = async () => {
+      try {
+        const response = await notificationPreferencesApi.get("/");
+        setIncidentCategories(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchIncidentCategories();
+  }, []);
 
   const toggleCheckbox = (category) => {
     setSelectedCategories((prev) =>
@@ -21,6 +28,14 @@ const InitScreen = () => {
         : [...prev, category]
     );
   };
+
+  const handleNotificationPreferencesSubmit = async () => {
+    try {
+      await notificationPreferencesApi.post(`/${deviceToken}`, selectedCategories);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <View className="flex-1 mt-7">
@@ -56,6 +71,7 @@ const InitScreen = () => {
       <TouchableOpacity
         className="bg-primary rounded-3xl py-3 mt-10 mx-12"
         activeOpacity={0.7}
+        onPress={handleNotificationPreferencesSubmit}
       >
         <Text className="text-xl text-center text-white font-ops-sb">
           Continue
