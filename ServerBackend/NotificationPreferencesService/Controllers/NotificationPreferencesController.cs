@@ -60,12 +60,22 @@ public class NotificationPreferencesController : ControllerBase
         }
 
         await _deviceTopicInfoRepository.AddAsync(new DeviceTopicInfo { DeviceId = deviceToken, SubscribedTopics = notificationPreferences });
+        
         var preferences = await _notificationPreferenceRepository.GetAllAsync();
+        var mandatoryPreferences = preferences.Where(p => p.ImportanceFlag == "Mandatory");
 
-        foreach (var preference in notificationPreferences)
+        var sanitizedPreferences = notificationPreferences.Select(np => new NotificationPreference
         {
-            var sanitizedTopic = preferences.First(p => p.PreferenceName == preference);
-            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], sanitizedTopic.TopicName);
+            PreferenceName = np,
+            TopicName = preferences.First(p => p.PreferenceName == np).TopicName,
+            ImportanceFlag = "Optional"
+        });
+
+        var allPreferences = mandatoryPreferences.Concat(sanitizedPreferences).ToList();
+
+        foreach (var preference in allPreferences)
+        {
+            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], preference.TopicName);
         }
 
         return Ok(deviceToken);

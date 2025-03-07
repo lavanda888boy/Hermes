@@ -3,7 +3,9 @@ import InitScreen from "./index.jsx";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useFCMToken from "../config/useFCMToken";
+import { FCMProvider } from "../config/FCMContext.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState, useEffect } from "react";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,15 +17,26 @@ export default function App() {
     "OpenSans-SemiBold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
   });
 
-  const fcmToken = useFCMToken();
-
-  if (isLoaded && fcmToken !== "") {
+  if (isLoaded) {
     SplashScreen.hideAsync();
   }
 
+  const [isDeviceRegistered, setIsDeviceRegistered] = useState(null);
+
+  useEffect(() => {
+    const checkDeviceRegistration = async () => {
+      const deviceRegistered = await AsyncStorage.getItem("deviceRegistered");
+      setIsDeviceRegistered(deviceRegistered === "true");
+    };
+
+    checkDeviceRegistration();
+  }, []);
+
   return (
-    <SafeAreaView className="flex-1 justify-center p-4">
-      <InitScreen deviceToken={fcmToken} />
-    </SafeAreaView>
+    <FCMProvider>
+      <SafeAreaView className="flex-1 justify-center p-4">
+        {isDeviceRegistered ? <></> : <InitScreen />}
+      </SafeAreaView>
+    </FCMProvider>
   );
 }

@@ -14,8 +14,10 @@ namespace NotificationPreferencesService.Repository
 
         public async Task<List<NotificationPreference>> GetAllAsync()
         {
-            var cursor = await _notificationPreferencesCollection.FindAsync(Builders<NotificationPreference>.Filter.Empty);
-            var preferences = await cursor.ToListAsync();
+            var filter = Builders<NotificationPreference>.Filter.Eq("ImportanceFlag", "Optional");
+            var preferencesCursor = await _notificationPreferencesCollection.FindAsync(filter);
+            var preferences = await preferencesCursor.ToListAsync();
+            
             return preferences;
         }
     }

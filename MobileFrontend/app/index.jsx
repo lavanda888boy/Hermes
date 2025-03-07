@@ -1,12 +1,16 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import Checkbox from "expo-checkbox";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import notificationPreferencesApi from "../config/axios";
+import { FCMContext } from "../config/FCMContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const InitScreen = ({ deviceToken }) => {
+const InitScreen = () => {
   const [incidentCategories, setIncidentCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const { fcmToken } = useContext(FCMContext);
 
   useEffect(() => {
     const fetchIncidentCategories = async () => {
@@ -31,7 +35,8 @@ const InitScreen = ({ deviceToken }) => {
 
   const handleNotificationPreferencesSubmit = async () => {
     try {
-      await notificationPreferencesApi.post(`/${deviceToken}`, selectedCategories);
+      await notificationPreferencesApi.post(`/${fcmToken}`, selectedCategories);
+      await AsyncStorage.setItem("deviceRegistered", "true");
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +56,7 @@ const InitScreen = ({ deviceToken }) => {
 
       <Text className="text-lg text-primary text-justify font-ops-r px-4 mt-4">
         You're going to be automatically subscribed to critical incident notifications
-        (earthquakes, flood, wildfires, etc.). If you wish you can also subscribe to some
+        (earthquakes, floods, wildfires, etc.). If you wish you can also subscribe to some
         additional notifications from the list below. Your preferences can be
         later change.
       </Text>

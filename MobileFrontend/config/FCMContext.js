@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
-import * as Notifications from 'expo-notifications';
+import { createContext, useState, useEffect } from "react";
+import * as Notifications from "expo-notifications";
 
-const useFCMToken = () => {
+export const FCMContext = createContext();
+
+export const FCMProvider = ({ children }) => {
   const [fcmToken, setFcmToken] = useState("");
 
   useEffect(() => {
@@ -9,7 +11,7 @@ const useFCMToken = () => {
       const { status } = await Notifications.requestPermissionsAsync();
 
       if (status !== "granted") {
-        alert('You need to enable permissions in order to receive notifications.');
+        alert("You need to enable permissions in order to receive notifications.");
         return;
       }
 
@@ -24,7 +26,9 @@ const useFCMToken = () => {
     getFcmToken();
   }, []);
 
-  return fcmToken;
+  return (
+    <FCMContext.Provider value={{ fcmToken }}>
+      {children}
+    </FCMContext.Provider>
+  );
 };
-
-export default useFCMToken;
