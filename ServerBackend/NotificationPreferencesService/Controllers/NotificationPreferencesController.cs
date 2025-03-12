@@ -84,11 +84,6 @@ public class NotificationPreferencesController : ControllerBase
     [HttpPut("{deviceToken}")]
     public async Task<IActionResult> UpdateNotificationPreferences(string deviceToken, [FromBody] List<string> notificationPreferences)
     {
-        if (notificationPreferences == null || notificationPreferences.Count == 0)
-        {
-            return BadRequest("Notification preferences list for update is empty");
-        }
-
         var device = await _deviceTopicInfoRepository.GetByIdAsync(deviceToken);
 
         if (device == null)
@@ -99,7 +94,7 @@ public class NotificationPreferencesController : ControllerBase
         var topicsToSubscribe = notificationPreferences.Except(device.SubscribedTopics);
         var topicsToUnsubscribe = device.SubscribedTopics.Except(notificationPreferences);
 
-        device.SubscribedTopics = [.. notificationPreferences.Intersect(device.SubscribedTopics)];
+        device.SubscribedTopics = notificationPreferences;
         await _deviceTopicInfoRepository.UpdateAsync(device);
 
         var preferences = await _notificationPreferenceRepository.GetAllAsync();

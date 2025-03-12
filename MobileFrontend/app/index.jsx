@@ -26,14 +26,14 @@ const InitScreen = () => {
       }
 
       await AsyncStorage.setItem("deviceRegistered", "true");
-      router.replace("/(tabs)/home");
+      router.replace("/home");
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <SafeAreaView className="flex-1 justify-center p-4">
+    <SafeAreaView className="flex-1 justify-center p-4 bg-white">
       <View className="flex-1 mt-7">
         <Image
           className="w-40 h-40 self-center mb-4"
@@ -59,8 +59,9 @@ const InitScreen = () => {
         />
 
         <SubmitButton
-          onPress={handleNotificationPreferencesSubmit}
           title="Continue"
+          onPress={handleNotificationPreferencesSubmit}
+          disabled={false}
         />
       </View>
     </SafeAreaView>

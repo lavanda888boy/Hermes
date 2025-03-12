@@ -4,11 +4,13 @@ import { useFonts } from "expo-font";
 import { ApiContextProvider } from "../config/apiContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
-import { Slot } from "expo-router";
+import { useRouter, Slot } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const router = useRouter();
+
   const [isLoaded] = useFonts({
     "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),
     "OpenSans-Light": require("../assets/fonts/OpenSans-Light.ttf"),
