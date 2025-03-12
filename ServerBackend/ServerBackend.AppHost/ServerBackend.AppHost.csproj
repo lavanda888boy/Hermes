@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\APIGateway\APIGateway.csproj" />
     <ProjectReference Include="..\GPSLocationTrackingService\GPSLocationTrackingService.csproj" />
     <ProjectReference Include="..\IncidentRegistrationService\IncidentRegistrationService.csproj" />
+    <ProjectReference Include="..\NotificationPreferencesService\NotificationPreferencesService.csproj" />
   </ItemGroup>
 
 </Project>

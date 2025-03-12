@@ -1,4 +1,5 @@
 using Projects;
+using System.Security.Cryptography.Xml;
 
 namespace ServerBackend.AppHost;
 
@@ -7,9 +8,15 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = DistributedApplication.CreateBuilder(args);
-        
-        builder.AddProject<IncidentRegistrationService>("incident-registration");
-        builder.AddProject<GPSLocationTrackingService>("gps-tracking");
+
+        var notificationPreferences = builder.AddProject<NotificationPreferencesService>("notification-preferences");
+        var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration");
+        var gpsTracking = builder.AddProject<GPSLocationTrackingService>("gps-tracking");
+
+        builder.AddProject<APIGateway>("api-gateway")
+                                .WithReference(notificationPreferences)
+                                .WithReference(incidentRegistration)
+                                .WithReference(gpsTracking);
 
         builder.Build().Run();
     }

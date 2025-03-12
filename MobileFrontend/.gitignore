@@ -36,4 +36,7 @@ yarn-error.*
 *.tsbuildinfo
 
 .idea
+
+google-services.json
+
 .env

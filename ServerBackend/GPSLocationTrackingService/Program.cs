@@ -21,10 +21,7 @@ namespace GPSLocationTrackingService
                 app.MapOpenApi();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 

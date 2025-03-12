@@ -21,7 +21,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.jpg",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.project_alpha.hermes"
+      "package": "com.project_alpha.hermes",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -29,7 +30,8 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-notifications"
+      "expo-notifications",
+      "@react-native-firebase/app"
     ]
   }
 }
