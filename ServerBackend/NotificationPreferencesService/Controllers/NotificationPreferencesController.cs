@@ -1,5 +1,3 @@
-using FirebaseAdmin;
-using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using NotificationPreferencesService.Models;
@@ -11,15 +9,13 @@ namespace NotificationPreferencesService.Controllers;
 [Route("/")]
 public class NotificationPreferencesController : ControllerBase
 {
-    private readonly FirebaseMessaging _firebaseMessaging;
     private readonly IRepository<NotificationPreference> _notificationPreferenceRepository;
     private readonly IRepository<DeviceTopicInfo> _deviceTopicInfoRepository;
 
-    public NotificationPreferencesController(FirebaseApp firebaseApp, 
+    public NotificationPreferencesController(
         IRepository<NotificationPreference> notificationPreferenceRepository, 
         IRepository<DeviceTopicInfo> deviceTopicInfoRepository)
     {
-        _firebaseMessaging = FirebaseMessaging.GetMessaging(firebaseApp);
         _notificationPreferenceRepository = notificationPreferenceRepository;
         _deviceTopicInfoRepository = deviceTopicInfoRepository;
     }
@@ -60,23 +56,6 @@ public class NotificationPreferencesController : ControllerBase
         }
 
         await _deviceTopicInfoRepository.AddAsync(new DeviceTopicInfo { DeviceId = deviceToken, SubscribedTopics = notificationPreferences });
-        
-        var preferences = await _notificationPreferenceRepository.GetAllAsync();
-        var mandatoryPreferences = preferences.Where(p => p.ImportanceFlag == "Mandatory");
-
-        var sanitizedPreferences = notificationPreferences.Select(np => new NotificationPreference
-        {
-            PreferenceName = np,
-            TopicName = preferences.First(p => p.PreferenceName == np).TopicName,
-            ImportanceFlag = "Optional"
-        });
-
-        var allPreferences = mandatoryPreferences.Concat(sanitizedPreferences).ToList();
-
-        foreach (var preference in allPreferences)
-        {
-            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], preference.TopicName);
-        }
 
         return Ok(deviceToken);
     }
@@ -91,25 +70,8 @@ public class NotificationPreferencesController : ControllerBase
             return BadRequest($"Device with token {deviceToken} does not exist.");
         }
 
-        var topicsToSubscribe = notificationPreferences.Except(device.SubscribedTopics);
-        var topicsToUnsubscribe = device.SubscribedTopics.Except(notificationPreferences);
-
         device.SubscribedTopics = notificationPreferences;
         await _deviceTopicInfoRepository.UpdateAsync(device);
-
-        var preferences = await _notificationPreferenceRepository.GetAllAsync();
-
-        foreach (var topic in topicsToSubscribe)
-        {
-            var sanitizedTopic = preferences.First(p => p.PreferenceName == topic);
-            await _firebaseMessaging.SubscribeToTopicAsync([deviceToken], sanitizedTopic.TopicName);
-        }
-
-        foreach (var topic in topicsToUnsubscribe)
-        {
-            var sanitizedTopic = preferences.First(p => p.PreferenceName == topic);
-            await _firebaseMessaging.UnsubscribeFromTopicAsync([deviceToken], sanitizedTopic.TopicName);
-        }
 
         return Ok(deviceToken);
     }

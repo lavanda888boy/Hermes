@@ -1,5 +1,4 @@
-﻿using FirebaseAdmin.Messaging;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MongoDB.Driver;
 
@@ -11,12 +10,7 @@ namespace NotificationPreferencesService.Filters
         {
             var exception = context.Exception;
 
-            if (exception is FirebaseMessagingException)
-            {
-                context.Result = new BadRequestObjectResult("Firebase Messaging Error: " + exception.Message);
-            }
-            else if (exception is MongoWriteException || exception is MongoQueryException 
-                    || exception is MongoCommandException)
+            if (exception is MongoWriteException || exception is MongoQueryException || exception is MongoCommandException)
             {
                 context.Result = new BadRequestObjectResult("MongoDB Error: " + exception.Message);
             }

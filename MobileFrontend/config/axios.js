@@ -7,4 +7,11 @@ const notificationPreferencesApi = axios.create({
   }
 });
 
-export default notificationPreferencesApi;
+const gpsTrackingApi = axios.create({
+  baseURL: `${process.env.API_GATEWAY_URL}/gps-tracking`,
+  headers: {
+    "Content-Type": "application/json",
+  }
+});
+
+export { notificationPreferencesApi, gpsTrackingApi };
