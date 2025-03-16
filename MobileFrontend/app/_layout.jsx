@@ -3,8 +3,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { ApiContextProvider } from "../config/apiContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
-import { useRouter, Slot, useRootNavigationState } from "expo-router";
+import { useEffect } from "react";
+import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 

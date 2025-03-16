@@ -1,3 +1,5 @@
+using GPSLocationTrackingService.Filters;
+
 namespace GPSLocationTrackingService
 {
     public class Program
@@ -6,7 +8,7 @@ namespace GPSLocationTrackingService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options => options.Filters.Add<ExceptionFilter>());
 
             builder.AddRedisClient(connectionName: "gps-storage");
 

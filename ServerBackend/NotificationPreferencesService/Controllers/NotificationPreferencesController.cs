@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
 using NotificationPreferencesService.Models;
 using NotificationPreferencesService.Repository;
 

@@ -2,16 +2,16 @@
 
 namespace NotificationPreferencesService.Models
 {
-    public class NotificationPreference
+    public record NotificationPreference
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string? Id { get; init; }
 
-        public required string PreferenceName { get; set; }
+        public required string PreferenceName { get; init; }
 
-        public required string TopicName { get; set; }
+        public required string TopicName { get; init; }
 
-        public required string ImportanceFlag { get; set; }
+        public required string ImportanceFlag { get; init; }
     }
 }

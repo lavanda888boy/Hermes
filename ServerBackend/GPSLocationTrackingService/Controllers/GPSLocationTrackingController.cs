@@ -1,3 +1,4 @@
+using GPSLocationTrackingService.Models;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
 
@@ -7,17 +8,32 @@ namespace GPSLocationTrackingService.Controllers
     [Route("/")]
     public class GPSLocationTrackingController : ControllerBase
     {
-        private readonly IConnectionMultiplexer _redisGPSStorage;
+        private readonly IDatabase _redisGPSStorage;
+        private readonly string RedisGeoKey = "device_locations";
 
-        public GPSLocationTrackingController(IConnectionMultiplexer redisGPSStorage)
+        public GPSLocationTrackingController(IConnectionMultiplexer redisResource)
         {
-            _redisGPSStorage = redisGPSStorage;
+            _redisGPSStorage = redisResource.GetDatabase();
+        }
+
+        [HttpGet("{deviceToken}")]
+        public async Task<IActionResult> GetDeviceGPSLocationByDeviceToken(string deviceToken)
+        {
+            var coordinates = await _redisGPSStorage.GeoPositionAsync(RedisGeoKey, deviceToken);
+            
+            if (coordinates.HasValue)
+            {
+                return Ok(coordinates.Value);
+            }
+
+            return BadRequest($"No coordinates registered for the device with token: {deviceToken}");
         }
 
         [HttpPost("{deviceToken}")]
-        public async Task<IActionResult> SetDeviceGPSLocation(string deviceToken)
+        public async Task<IActionResult> SetDeviceGPSLocation(string deviceToken, [FromBody] GPSLocation gpsLocation)
         {
-            return Ok("");
+            await _redisGPSStorage.GeoAddAsync(RedisGeoKey, gpsLocation.Longitude, gpsLocation.Latitude, deviceToken);
+            return Ok(deviceToken);
         }
     }
 }

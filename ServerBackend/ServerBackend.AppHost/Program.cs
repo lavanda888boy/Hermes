@@ -12,8 +12,8 @@ public class Program
         var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration");
 
         var gpsStorage = builder.AddRedis("gps-storage")
-                                .WithDataVolume("gps-storage-volume")
-                                .WithRedisInsight();
+                                .WithHttpEndpoint(port: 6379, targetPort: 6379)
+                                .WithDataVolume("gps-storage-volume");
 
         var gpsTracking = builder.AddProject<GPSLocationTrackingService>("gps-tracking")
                                  .WithReference(gpsStorage)
