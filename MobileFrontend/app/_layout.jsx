@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
+import { gpsTrackingApi } from "../config/axios.js";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -85,11 +86,14 @@ TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error 
 
   if (data) {
     const { locations } = data;
-    let lat = locations[0].coords.latitude;
-    let long = locations[0].coords.longitude;
 
-    console.log(
-      `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`
-    );
+    try {
+      await gpsTrackingApi.post("/", {
+        "longitude": locations[0].coords.longitude,
+        "latitude": locations[0].coords.latitude
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 });
