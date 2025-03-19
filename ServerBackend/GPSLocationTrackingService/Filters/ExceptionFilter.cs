@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
-namespace NotificationPreferencesService.Filters
+namespace GPSLocationTrackingService.Filters
 {
     public class ExceptionFilter : ExceptionFilterAttribute
     {
@@ -10,9 +10,9 @@ namespace NotificationPreferencesService.Filters
         {
             var exception = context.Exception;
 
-            if (exception is MongoWriteException || exception is MongoQueryException || exception is MongoCommandException)
+            if (exception is RedisServerException)
             {
-                context.Result = new BadRequestObjectResult("MongoDB Error: " + exception.Message);
+                context.Result = new BadRequestObjectResult("Redis Request Error: " + exception.Message);
             }
             else
             {

@@ -1,3 +1,4 @@
+using GPSLocationTrackingService.Filters;
 
 namespace GPSLocationTrackingService
 {
@@ -7,19 +8,11 @@ namespace GPSLocationTrackingService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddControllers(options => options.Filters.Add<ExceptionFilter>());
 
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+            builder.AddRedisClient(connectionName: "gps-storage");
 
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
 
             app.UseAuthorization();
 

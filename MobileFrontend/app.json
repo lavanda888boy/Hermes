@@ -31,6 +31,12 @@
       "expo-router",
       "expo-font",
       "expo-notifications",
+      [
+        "expo-location",
+        {
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ],
       "@react-native-firebase/app"
     ]
   }

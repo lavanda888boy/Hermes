@@ -15,7 +15,7 @@ export const ApiContextProvider = ({ children }) => {
         const { status } = await Notifications.requestPermissionsAsync();
 
         if (status !== "granted") {
-          alert("You need to enable permissions to receive notifications.");
+          alert("You need to enable notification permissions to use the app.");
           return;
         }
 

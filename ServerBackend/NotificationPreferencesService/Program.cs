@@ -1,5 +1,3 @@
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using MongoDB.Driver;
 using NotificationPreferencesService.Filters;
 using NotificationPreferencesService.Models;
@@ -27,11 +25,6 @@ namespace NotificationPreferencesService
                 var client = sp.GetRequiredService<IMongoClient>();
                 return client.GetDatabase(mongoDatabaseName);
             });
-
-            builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
-            }));
 
             builder.Services.AddScoped<IRepository<NotificationPreference>, NotificationPreferenceRepository>()
                             .AddScoped<IRepository<DeviceTopicInfo>, DeviceTopicInfoRepository>();

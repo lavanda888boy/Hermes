@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 namespace IncidentRegistrationService
 {
@@ -5,21 +7,18 @@ namespace IncidentRegistrationService
     {
         public static void Main(string[] args)
         {
+            DotNetEnv.Env.Load();
+
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
+            }));
 
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
 
             app.UseAuthorization();
 

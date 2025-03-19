@@ -1,5 +1,4 @@
 using Projects;
-using System.Security.Cryptography.Xml;
 
 namespace ServerBackend.AppHost;
 
@@ -11,7 +10,15 @@ public class Program
 
         var notificationPreferences = builder.AddProject<NotificationPreferencesService>("notification-preferences");
         var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration");
-        var gpsTracking = builder.AddProject<GPSLocationTrackingService>("gps-tracking");
+
+        var gpsStorage = builder.AddRedis("gps-storage")
+                                .WithHttpEndpoint(port: 6379, targetPort: 6379)
+                                .WithDataVolume("gps-storage-volume");
+
+        var gpsTracking = builder.AddProject<GPSLocationTrackingService>("gps-tracking")
+                                 .WithReference(gpsStorage)
+                                 .WaitFor(gpsStorage)
+                                 .WithReplicas(3);
 
         builder.AddProject<APIGateway>("api-gateway")
                                 .WithReference(notificationPreferences)
