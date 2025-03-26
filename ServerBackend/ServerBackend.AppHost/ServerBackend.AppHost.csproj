@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AdminAuthenticationService\AdminAuthenticationService.csproj" />
     <ProjectReference Include="..\APIGateway\APIGateway.csproj" />
     <ProjectReference Include="..\GPSLocationTrackingService\GPSLocationTrackingService.csproj" />
     <ProjectReference Include="..\IncidentRegistrationService\IncidentRegistrationService.csproj" />
