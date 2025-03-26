@@ -1,7 +1,10 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using IncidentRegistrationService.Models;
+using IncidentRegistrationService.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using System.Text;
 
 namespace IncidentRegistrationService
@@ -33,10 +36,23 @@ namespace IncidentRegistrationService
 
             builder.Services.AddControllers();
 
+            var mongoConnectionString = DotNetEnv.Env.GetString("MONGODB_CONNECTION_STRING");
+            var mongoDatabaseName = DotNetEnv.Env.GetString("MONGODB_DATABASE");
+
+            builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient(mongoConnectionString));
+
+            builder.Services.AddScoped(sp =>
+            {
+                var client = sp.GetRequiredService<IMongoClient>();
+                return client.GetDatabase(mongoDatabaseName);
+            });
+
             builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
             {
                 Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
             }));
+
+            builder.Services.AddScoped<IRepository<Incident>, IncidentRepository>();
 
             var app = builder.Build();
 

@@ -6,9 +6,9 @@ namespace NotificationPreferencesService.Models
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string? Id { get; init; }
 
-        public required string DeviceId { get; set; }
+        public required string DeviceId { get; init; }
 
         public required List<string> SubscribedTopics { get; set; }
     }
