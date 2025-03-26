@@ -9,6 +9,7 @@ public class Program
         var builder = DistributedApplication.CreateBuilder(args);
 
         var notificationPreferences = builder.AddProject<NotificationPreferencesService>("notification-preferences");
+        var adminAuthentication = builder.AddProject<AdminAuthenticationService>("admin-auth");
         var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration");
 
         var gpsStorage = builder.AddRedis("gps-storage")
