@@ -11,27 +11,28 @@ namespace IncidentRegistrationService.Controllers
     {
         private readonly IRepository<Incident> _incidentRepository;
         private readonly IIncidentCorrelationService _incidentCorrelationService;
-        private readonly INotificationTransmissionService _notificationTransmissionService;
 
         public UserIncidentRegistrationController(IRepository<Incident> incidentRepository,
-            INotificationTransmissionService notificationTransmissionService,
             IIncidentCorrelationService incidentCorrelationService)
         {
             _incidentRepository = incidentRepository;
-            _notificationTransmissionService = notificationTransmissionService;
             _incidentCorrelationService = incidentCorrelationService;
-        }
-
-        [HttpGet("{userToken}")]
-        public async Task<IActionResult> GetAllIncidentsHavingAffectedTheUser(string userToken, [FromQuery] int timestampDays)
-        {
-            throw new NotImplementedException();
         }
 
         [HttpPost]
         public async Task<IActionResult> RegisterNewIncident([FromBody] Incident incident)
         {
-            throw new NotImplementedException();
-        }
+            var incidentIsDuplicate = await _incidentCorrelationService.CheckIncidentDuplicate(incident);
+
+            if (incidentIsDuplicate)
+            {
+                return BadRequest($"The reported incident was already submitted by someone else.");
+            }
+
+            incident.Status = "Pending";
+            await _incidentRepository.AddAsync(incident);
+
+            return Ok(incident.UserToReport);
+        } 
     }
 }

@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using NotificationPreferencesService.Models;
+using IncidentRegistrationService.Models;
 
 namespace IncidentRegistrationService.Repository
 {

@@ -54,10 +54,12 @@ namespace IncidentRegistrationService
                 Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
             }));
 
-            builder.Services.AddSingleton<IIncidentCorrelationService, IncidentCorrelationService>();
-            builder.Services.AddSingleton<INotificationTransmissionService, NotificationTransmissionService>();
+            builder.Services.AddScoped<IIncidentCorrelationService, IncidentCorrelationService>();
+            builder.Services.AddScoped<INotificationTransmissionService, NotificationTransmissionService>();
             
             builder.Services.AddScoped<IRepository<Incident>, IncidentRepository>();
+            builder.Services.AddScoped<IRepository<DeviceTopicInfo>, DeviceTopicInfoRepository>();
+            builder.Services.AddScoped<IRepository<NotificationPreference>, NotificationPreferenceRepository>();
 
             var app = builder.Build();
 
