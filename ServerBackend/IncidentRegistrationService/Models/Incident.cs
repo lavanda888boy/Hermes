@@ -10,7 +10,7 @@ namespace IncidentRegistrationService.Models
 
         public required string Category { get; set; }
 
-        public IncidentSeverity? IncidentSeverity { get; set; }
+        public IncidentSeverity? Severity { get; set; }
 
         public required DateTimeOffset Timestamp { get; set; }
 

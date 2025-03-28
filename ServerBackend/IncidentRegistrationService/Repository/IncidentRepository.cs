@@ -1,4 +1,5 @@
 ﻿using IncidentRegistrationService.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace IncidentRegistrationService.Repository
@@ -17,9 +18,10 @@ namespace IncidentRegistrationService.Repository
             await _incidentCollection.InsertOneAsync(entity);
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(Incident entity)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Incident>.Filter.Eq("_id", ObjectId.Parse(entity.Id));
+            await _incidentCollection.DeleteOneAsync(filter);
         }
 
         public async Task<List<Incident>> GetAllAsync()
@@ -28,6 +30,15 @@ namespace IncidentRegistrationService.Repository
             var incidents = await incidentCursor.ToListAsync();
 
             return incidents;
+        }
+
+        public async Task<Incident?> GetByIdAsync(string id)
+        {
+            var filter = Builders<Incident>.Filter.Eq("_id", ObjectId.Parse(id));
+            var incidentCursor = await _incidentCollection.FindAsync(filter);
+            var incident = await incidentCursor.FirstOrDefaultAsync();
+
+            return incident;
         }
 
         public async Task<List<Incident>> GetFilteredAsync()
@@ -41,7 +52,8 @@ namespace IncidentRegistrationService.Repository
 
         public async Task UpdateAsync(Incident entity)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Incident>.Filter.Eq("_id", ObjectId.Parse(entity.Id));
+            await _incidentCollection.ReplaceOneAsync(filter, entity);
         }
     }
 }

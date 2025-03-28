@@ -11,8 +11,6 @@ namespace IncidentRegistrationService.Responses
 
         public required string Category { get; init; }
 
-        public IncidentSeverity? IncidentSeverity { get; init; }
-
         public required DateTimeOffset Timestamp { get; init; }
 
         public required double Longitude { get; init; }
@@ -20,8 +18,6 @@ namespace IncidentRegistrationService.Responses
         public required double Latitude { get; init; }
 
         public required string UserToReport { get; init; }
-
-        public string? Status { get; init; }
 
         public string? Description { get; init; }
     }

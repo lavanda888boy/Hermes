@@ -11,7 +11,7 @@ namespace IncidentRegistrationService.Responses
 
         public required string Category { get; init; }
 
-        public required IncidentSeverity IncidentSeverity { get; init; }
+        public required IncidentSeverity Severity { get; init; }
 
         public required DateTimeOffset Timestamp { get; init; }
 

@@ -1,5 +1,6 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using IncidentRegistrationService.Filters;
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +35,7 @@ namespace IncidentRegistrationService
                                 };
                             });
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options => options.Filters.Add<ExceptionFilter>());
 
             var mongoConnectionString = DotNetEnv.Env.GetString("MONGODB_CONNECTION_STRING");
             var mongoDatabaseName = DotNetEnv.Env.GetString("MONGODB_DATABASE");
