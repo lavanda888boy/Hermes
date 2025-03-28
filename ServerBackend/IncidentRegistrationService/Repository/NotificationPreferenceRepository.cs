@@ -1,7 +1,7 @@
-﻿using MongoDB.Driver;
-using NotificationPreferencesService.Models;
+﻿using IncidentRegistrationService.Models;
+using MongoDB.Driver;
 
-namespace NotificationPreferencesService.Repository
+namespace IncidentRegistrationService.Repository
 {
     public class NotificationPreferenceRepository : IRepository<NotificationPreference>
     {
@@ -10,14 +10,6 @@ namespace NotificationPreferencesService.Repository
         public NotificationPreferenceRepository(IMongoDatabase mongoDatabase)
         {
             _notificationPreferencesCollection = mongoDatabase.GetCollection<NotificationPreference>("NotificationPreferences");
-        }
-
-        public async Task<List<NotificationPreference>> GetAllAsync()
-        {
-            var preferencesCursor = await _notificationPreferencesCollection.FindAsync(Builders<NotificationPreference>.Filter.Empty);
-            var preferences = await preferencesCursor.ToListAsync();
-            
-            return preferences;
         }
 
         public async Task<List<NotificationPreference>> GetFilteredAsync(string flag)

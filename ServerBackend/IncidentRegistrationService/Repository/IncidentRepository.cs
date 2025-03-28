@@ -41,9 +41,9 @@ namespace IncidentRegistrationService.Repository
             return incident;
         }
 
-        public async Task<List<Incident>> GetFilteredAsync()
+        public async Task<List<Incident>> GetFilteredAsync(string status)
         {
-            var filter = Builders<Incident>.Filter.Eq("Status", "pending");
+            var filter = Builders<Incident>.Filter.Eq("Status", status);
             var incidentCursor = await _incidentCollection.FindAsync(filter);
             var filteredIncidents = await incidentCursor.ToListAsync();
 

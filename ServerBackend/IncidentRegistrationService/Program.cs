@@ -3,6 +3,7 @@ using Google.Apis.Auth.OAuth2;
 using IncidentRegistrationService.Filters;
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
+using IncidentRegistrationService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -53,6 +54,9 @@ namespace IncidentRegistrationService
                 Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
             }));
 
+            builder.Services.AddSingleton<IIncidentCorrelationService, IncidentCorrelationService>();
+            builder.Services.AddSingleton<INotificationTransmissionService, NotificationTransmissionService>();
+            
             builder.Services.AddScoped<IRepository<Incident>, IncidentRepository>();
 
             var app = builder.Build();

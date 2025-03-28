@@ -1,6 +1,7 @@
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using IncidentRegistrationService.Responses;
+using IncidentRegistrationService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,16 +13,19 @@ namespace IncidentRegistrationService.Controllers
     public class AdminIncidentRegistrationController : ControllerBase
     {
         private readonly IRepository<Incident> _incidentRepository;
+        private readonly INotificationTransmissionService _notificationTransmissionService;
 
-        public AdminIncidentRegistrationController(IRepository<Incident> incidentRepository) 
+        public AdminIncidentRegistrationController(IRepository<Incident> incidentRepository,
+            INotificationTransmissionService notificationTransmissionService) 
         { 
             _incidentRepository = incidentRepository;
+            _notificationTransmissionService = notificationTransmissionService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllIncidentsForValidation()
         {
-            var incidents = await _incidentRepository.GetFilteredAsync();
+            var incidents = await _incidentRepository.GetFilteredAsync("Pending");
 
             var incidentDtos = incidents.Select(incident => new AdminIncidentResponse
             {

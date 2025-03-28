@@ -4,6 +4,11 @@
     {
         Task<List<T>> GetAllAsync();
 
+        Task<List<T>> GetFilteredAsync(string filter)
+        {
+            throw new NotImplementedException("GetFilteredAsync is not implemented.");
+        }
+
         Task<T?> GetByIdAsync(string id)
         {
             throw new NotImplementedException("GetByIdAsync is not implemented.");
