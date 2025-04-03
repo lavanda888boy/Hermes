@@ -1,3 +1,4 @@
+using IncidentRegistrationService.DTOs;
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using IncidentRegistrationService.Responses;
@@ -31,6 +32,8 @@ namespace IncidentRegistrationService.Controllers
             {
                 Id = incident.Id,
                 Category = incident.Category,
+                Severity = Enum.GetName(typeof(IncidentSeverity), incident.Severity),
+                AreaRadius = incident.AreaRadius,
                 Timestamp = incident.Timestamp,
                 Longitude = incident.Longitude,
                 Latitude = incident.Latitude,
@@ -42,42 +45,39 @@ namespace IncidentRegistrationService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterNewIncident([FromBody] Incident incident)
+        public async Task<IActionResult> RegisterNewIncident([FromBody] AdminIncidentRequest incidentDTO)
         {
-            await _incidentRepository.AddAsync(incident);
-
-            var notificationData = new Dictionary<string, string>()
+            var incident = new Incident
             {
-                { "Category", incident.Category },
-                { "Severity", Enum.GetName(typeof(IncidentSeverity), incident.Severity) },
-                { "Description", incident.Description }
+                Category = incidentDTO.Category,
+                Severity = Enum.Parse<IncidentSeverity>(incidentDTO.Severity),
+                AreaRadius = incidentDTO.AreaRadius,
+                Timestamp = DateTimeOffset.UtcNow,
+                Longitude = incidentDTO.Longitude,
+                Latitude = incidentDTO.Latitude,
+                UserToReport = "Admin",
+                Status = "Approved",
+                Description = incidentDTO.Description
             };
 
-            await _notificationTransmissionService.SendIncidentNotification(notificationData);
+            await _incidentRepository.AddAsync(incident);
+            await _notificationTransmissionService.SendIncidentNotification(incident);
 
-            return Ok(notificationData);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateOrValidateIncidentDetails([FromBody] Incident incident)
+        public async Task<IActionResult> UpdateOrValidateIncidentDetails([FromBody] AdminIncidentRequest incidentDTO)
         {
-            var incidentToUpdate = await _incidentRepository.GetByIdAsync(incident.Id);
+            var incidentToUpdate = await _incidentRepository.GetByIdAsync(incidentDTO.Id);
 
             if (incidentToUpdate == null)
             {
-                return BadRequest($"Cannot update or validate non-existing incident with id: {incident.Id}");
+                return BadRequest($"Cannot update or validate non-existing incident with id: {incidentDTO.Id}");
             }
 
             await _incidentRepository.UpdateAsync(incidentToUpdate);
-
-            var notificationData = new Dictionary<string, string>()
-            {
-                { "Category", incidentToUpdate.Category },
-                { "Severity", Enum.GetName(typeof(IncidentSeverity), incidentToUpdate.Severity) },
-                { "Description", incidentToUpdate.Description }
-            };
-
-            await _notificationTransmissionService.SendIncidentNotification(notificationData);
+            await _notificationTransmissionService.SendIncidentNotification(incidentToUpdate);
 
             return Ok(incidentToUpdate.Id);
         }
@@ -93,7 +93,10 @@ namespace IncidentRegistrationService.Controllers
             }
 
             await _incidentRepository.DeleteAsync(incidentToDelete);
-            
+
+            string note = "This incident was added by mistake or no longer affects the area.";
+            await _notificationTransmissionService.SendIncidentNotification(incidentToDelete, note);
+
             return Ok(id);
         }
     }

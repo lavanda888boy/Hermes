@@ -1,4 +1,5 @@
-﻿using IncidentRegistrationService.Models;
+﻿using IncidentRegistrationService.DTOs;
+using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using IncidentRegistrationService.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,18 @@ namespace IncidentRegistrationService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterNewIncident([FromBody] Incident incident)
+        public async Task<IActionResult> RegisterNewIncident([FromBody] UserIncidentRequest incidentDTO)
         {
+            var incident = new Incident
+            {
+                Category = incidentDTO.Category,
+                AreaRadius = 0,
+                Timestamp = DateTimeOffset.UtcNow,
+                Longitude = incidentDTO.Longitude,
+                Latitude = incidentDTO.Latitude,
+                UserToReport = incidentDTO.UserToReport
+            };
+
             var incidentIsDuplicate = await _incidentCorrelationService.CheckIncidentDuplicate(incident);
 
             if (incidentIsDuplicate)

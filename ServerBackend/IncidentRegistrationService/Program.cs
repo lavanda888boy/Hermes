@@ -54,6 +54,8 @@ namespace IncidentRegistrationService
                 Credential = GoogleCredential.FromFile("hermes-firebase-adminsdk.json")
             }));
 
+            builder.AddRedisClient(connectionName: "gps-storage");
+
             builder.Services.AddScoped<IIncidentCorrelationService, IncidentCorrelationService>();
             builder.Services.AddScoped<INotificationTransmissionService, NotificationTransmissionService>();
             

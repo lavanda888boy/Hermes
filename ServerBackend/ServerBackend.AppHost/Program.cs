@@ -10,7 +10,6 @@ public class Program
 
         var notificationPreferences = builder.AddProject<NotificationPreferencesService>("notification-preferences");
         var adminAuthentication = builder.AddProject<AdminAuthenticationService>("admin-auth");
-        var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration");
 
         var gpsStorage = builder.AddRedis("gps-storage")
                                 .WithHttpEndpoint(port: 6379, targetPort: 6379)
@@ -21,7 +20,12 @@ public class Program
                                  .WaitFor(gpsStorage)
                                  .WithReplicas(3);
 
-        builder.AddProject<APIGateway>("api-gateway")
+        var incidentRegistration = builder.AddProject<IncidentRegistrationService>("incident-registration")
+                                          .WithReference(gpsStorage)
+                                          .WaitFor(gpsStorage)
+                                          .WithReplicas(3);
+
+        var apiGateway = builder.AddProject<APIGateway>("api-gateway")
                                 .WithReference(notificationPreferences)
                                 .WithReference(incidentRegistration)
                                 .WithReference(gpsTracking);

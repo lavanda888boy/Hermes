@@ -1,5 +1,4 @@
-﻿using IncidentRegistrationService.Models;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace IncidentRegistrationService.Responses
 {
@@ -10,6 +9,10 @@ namespace IncidentRegistrationService.Responses
         public required string Id { get; init; }
 
         public required string Category { get; init; }
+
+        public string? Severity { get; set; }
+
+        public double? AreaRadius { get; set; }
 
         public required DateTimeOffset Timestamp { get; init; }
 
