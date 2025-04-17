@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace NotificationPreferencesService.Models
+namespace IncidentRegistrationService.Models
 {
     public class DeviceTopicInfo
     {
