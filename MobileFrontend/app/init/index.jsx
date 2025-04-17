@@ -1,11 +1,11 @@
 import { SafeAreaView, View, Text, Image } from "react-native";
 import { useContext } from "react";
-import notificationPreferencesApi from "../config/axios";
-import { ApiContext } from "../config/apiContext";
+import notificationPreferencesApi from "../../config/axios";
+import { ApiContext } from "../../config/apiContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import IncidentCategoryList from "../components/incidentCategoryList";
-import SubmitButton from "../components/submitButton";
+import IncidentCategoryList from "../../components/incidentCategoryList";
+import SubmitButton from "../../components/submitButton";
 
 const InitScreen = () => {
   const { fcmToken, incidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
@@ -37,7 +37,7 @@ const InitScreen = () => {
       <View className="flex-1 mt-7">
         <Image
           className="w-40 h-40 self-center mb-4"
-          source={require("../assets/images/icon.jpg")}
+          source={require("../../assets/images/icon.jpg")}
         />
 
         <Text

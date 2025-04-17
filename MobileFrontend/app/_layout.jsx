@@ -61,7 +61,7 @@ const App = () => {
       if (deviceRegistered === "true") {
         router.replace("/home");
       } else {
-        router.replace("/");
+        router.replace("/init");
       }
     };
 
@@ -78,7 +78,6 @@ const App = () => {
 export default App;
 
 TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error }) => {
-  console.log("hi")
   if (error) {
     console.log('LOCATION_TRACKING task ERROR:', error);
     return;

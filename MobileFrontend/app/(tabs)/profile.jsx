@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../config/apiContext";
 import IncidentCategoryList from "../../components/incidentCategoryList";
