@@ -37,7 +37,7 @@ namespace IncidentRegistrationService.Services
                     inc.AreaRadius,
                     GeoUnit.Kilometers);
 
-                if (result.Any(r => r.Member.ToString() == incident.UserToReport) ||
+                if (result.Any(r => r.Member.ToString() == incident.UserToReport) &&
                     incident.Timestamp < inc.Timestamp.AddMinutes(30))
                 {
                     return true;

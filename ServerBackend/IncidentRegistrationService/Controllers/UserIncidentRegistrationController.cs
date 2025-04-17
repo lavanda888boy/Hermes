@@ -30,7 +30,8 @@ namespace IncidentRegistrationService.Controllers
                 Timestamp = DateTimeOffset.UtcNow,
                 Longitude = incidentDTO.Longitude,
                 Latitude = incidentDTO.Latitude,
-                UserToReport = incidentDTO.UserToReport
+                UserToReport = incidentDTO.UserToReport,
+                Description = incidentDTO.Description
             };
 
             var incidentIsDuplicate = await _incidentCorrelationService.CheckIncidentDuplicate(incident);

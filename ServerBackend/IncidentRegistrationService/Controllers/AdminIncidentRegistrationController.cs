@@ -32,7 +32,6 @@ namespace IncidentRegistrationService.Controllers
             {
                 Id = incident.Id,
                 Category = incident.Category,
-                Severity = Enum.GetName(typeof(IncidentSeverity), incident.Severity),
                 AreaRadius = incident.AreaRadius,
                 Timestamp = incident.Timestamp,
                 Longitude = incident.Longitude,
@@ -75,6 +74,14 @@ namespace IncidentRegistrationService.Controllers
             {
                 return BadRequest($"Cannot update or validate non-existing incident with id: {incidentDTO.Id}");
             }
+
+            incidentToUpdate.Category = incidentDTO.Category;
+            incidentToUpdate.Severity = Enum.Parse<IncidentSeverity>(incidentDTO.Severity);
+            incidentToUpdate.AreaRadius = incidentDTO.AreaRadius;
+            incidentToUpdate.Longitude = incidentDTO.Longitude;
+            incidentToUpdate.Latitude = incidentDTO.Latitude;
+            incidentToUpdate.Status = "Approved";
+            incidentToUpdate.Description = incidentDTO.Description;
 
             await _incidentRepository.UpdateAsync(incidentToUpdate);
             await _notificationTransmissionService.SendIncidentNotification(incidentToUpdate);
