@@ -8,6 +8,7 @@ import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { gpsTrackingApi } from "../config/axios.js";
+import * as Notifications from "expo-notifications";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,6 +43,28 @@ const App = () => {
 
     requestLocationPermissions();
   }, []);
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+
+  Notifications.addNotificationReceivedListener(async (notification) => {
+    const notificationData = notification.request.content.data;
+
+    let notifications = await AsyncStorage.getItem("notifications");
+    notifications = notifications ? JSON.parse(notifications) : [];
+
+    notifications.push(notificationData);
+    await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
+  });
+
+  Notifications.addNotificationResponseReceivedListener(() => {
+    router.replace("/home");
+  });
 
   const [isLoaded] = useFonts({
     "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),

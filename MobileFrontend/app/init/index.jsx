@@ -1,14 +1,17 @@
 import { SafeAreaView, View, Text, Image } from "react-native";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import notificationPreferencesApi from "../../config/axios";
 import { ApiContext } from "../../config/apiContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import IncidentCategoryList from "../../components/incidentCategoryList";
 import SubmitButton from "../../components/submitButton";
+import SnackBarMessage from "../../components/snackBarMessage";
 
 const InitScreen = () => {
   const { fcmToken, incidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
+  const [snackbarVisible, setSnackbarVisible] = useState(true);
+
   const router = useRouter();
 
   const toggleCheckbox = (category) => {
@@ -23,12 +26,17 @@ const InitScreen = () => {
     try {
       if (selectedCategories.length > 0) {
         await notificationPreferencesApi.post(`/${fcmToken}`, selectedCategories);
+        await AsyncStorage.setItem("deviceRegistered", "true");
+        router.replace("/home");
       }
-
-      await AsyncStorage.setItem("deviceRegistered", "true");
-      router.replace("/home");
     } catch (error) {
       console.log(error);
+
+      setSnackbarVisible(true);
+
+      setTimeout(() => {
+        setSnackbarVisible(false);
+      }, 3000);
     }
   }
 
@@ -37,7 +45,7 @@ const InitScreen = () => {
       <View className="flex-1 mt-7">
         <Image
           className="w-40 h-40 self-center mb-4"
-          source={require("../../assets/images/icon.jpg")}
+          source={require("../../assets/images/icon.png")}
         />
 
         <Text
@@ -62,6 +70,14 @@ const InitScreen = () => {
           title="Continue"
           onPress={handleNotificationPreferencesSubmit}
           disabled={false}
+        />
+
+        <SnackBarMessage
+          snackbarVisible={snackbarVisible}
+          textMessage="⛔ An error occurred. Please try again later."
+          styleSheet={{
+            backgroundColor: "#1976D2",
+          }}
         />
       </View>
     </SafeAreaView>

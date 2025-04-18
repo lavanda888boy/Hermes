@@ -1,14 +1,17 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../config/apiContext";
 import IncidentCategoryList from "../../components/incidentCategoryList";
 import SubmitButton from "../../components/submitButton";
 import { useRouter } from "expo-router";
 import notificationPreferencesApi from "../../config/axios";
+import SnackBarMessage from "../../components/snackBarMessage";
 
 const Profile = () => {
   const { fcmToken, incidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
   const [initialCategories, setInitialCategories] = useState([]);
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const router = useRouter();
 
@@ -30,9 +33,16 @@ const Profile = () => {
     try {
       await notificationPreferencesApi.put(`/${fcmToken}`, selectedCategories);
       setInitialCategories([...selectedCategories]);
+
       router.replace("/home");
     } catch (error) {
       console.log(error);
+
+      setSnackbarVisible(true);
+
+      setTimeout(() => {
+        setSnackbarVisible(false);
+      }, 3000);
     }
   }
 
@@ -54,7 +64,17 @@ const Profile = () => {
         onPress={handleNotificationPreferencesSubmit}
         disabled={!categoriesHaveChanges}
       />
-    </View>
+
+      <SnackBarMessage
+        snackbarVisible={snackbarVisible}
+        textMessage="⛔ An error occurred. Please try again later."
+        styleSheet={{
+          position: "absolute",
+          bottom: 0,
+          left: 15
+        }}
+      />
+    </View >
   );
 };
 

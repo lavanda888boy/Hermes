@@ -5,7 +5,7 @@
     "scheme": "hermes",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.jpg",
+    "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.jpg",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.project_alpha.hermes",
@@ -36,8 +36,7 @@
         {
           "isAndroidBackgroundLocationEnabled": true
         }
-      ],
-      "@react-native-firebase/app"
+      ]
     ]
   }
 }

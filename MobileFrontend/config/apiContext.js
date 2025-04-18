@@ -21,6 +21,7 @@ export const ApiContextProvider = ({ children }) => {
 
         const tokenResponse = await Notifications.getDevicePushTokenAsync();
         setFcmToken(tokenResponse.data);
+        console.log("FCM Token:", tokenResponse.data);
       } catch (error) {
         console.error("Error getting FCM token:", error);
       }
