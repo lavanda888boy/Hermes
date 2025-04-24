@@ -37,7 +37,7 @@ const App = () => {
           distanceInterval: parseInt(process.env.LOCATION_TRACKING_DISTANCE_INTERVAL),
         });
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     };
 
@@ -115,7 +115,7 @@ TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error 
         "latitude": locations[0].coords.latitude
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 });

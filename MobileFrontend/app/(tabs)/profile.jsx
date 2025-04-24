@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../config/apiContext";
 import IncidentCategoryList from "../../components/incidentCategoryList";
@@ -67,8 +67,9 @@ const Profile = () => {
 
       <SnackBarMessage
         snackbarVisible={snackbarVisible}
-        textMessage="⛔ An error occurred. Please try again later."
+        textMessage="⛔ An error occurred. Try again later."
         styleSheet={{
+          backgroundColor: "#1976D2",
           position: "absolute",
           bottom: 0,
           left: 15

@@ -30,7 +30,7 @@ const InitScreen = () => {
         router.replace("/home");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       setSnackbarVisible(true);
 
@@ -74,7 +74,7 @@ const InitScreen = () => {
 
         <SnackBarMessage
           snackbarVisible={snackbarVisible}
-          textMessage="⛔ An error occurred. Please try again later."
+          textMessage="⛔ An error occurred. Try again later"
           styleSheet={{
             backgroundColor: "#1976D2",
           }}

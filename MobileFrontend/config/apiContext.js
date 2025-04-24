@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import * as Notifications from "expo-notifications";
-import notificationPreferencesApi from "./axios";
+import { notificationPreferencesApi } from "./axios";
 
 export const ApiContext = createContext();
 
@@ -41,7 +41,7 @@ export const ApiContextProvider = ({ children }) => {
         const selectedCategoriesResponse = await notificationPreferencesApi.get(`/${fcmToken}`);
         setSelectedCategories(selectedCategoriesResponse.data);
       } catch (error) {
-        setSelectedCategories([]);
+        console.error(error);
       }
     };
 
