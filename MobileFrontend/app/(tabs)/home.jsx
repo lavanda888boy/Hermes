@@ -31,7 +31,7 @@ const Home = () => {
         }}
       >
         <View className="flex-1 justify-center items-center bg-black/30">
-          <IncidentReportForm />
+          <IncidentReportForm onClose={() => setIncidentReportFormVisible(false)} />
         </View>
       </Modal>
     </View>

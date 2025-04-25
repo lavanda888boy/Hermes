@@ -14,4 +14,11 @@ const gpsTrackingApi = axios.create({
   }
 });
 
-export { notificationPreferencesApi, gpsTrackingApi };
+const incidentRegistrationApi = axios.create({
+  baseURL: `${process.env.API_GATEWAY_URL}/incident-registration`,
+  headers: {
+    "Content-Type": "application/json",
+  }
+});
+
+export { notificationPreferencesApi, gpsTrackingApi, incidentRegistrationApi };

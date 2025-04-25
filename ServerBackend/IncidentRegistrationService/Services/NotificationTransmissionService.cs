@@ -54,6 +54,7 @@ namespace IncidentRegistrationService.Services
         private async Task<List<string>> GetDeviceTokensOfAffectedUsers(Incident incident)
         {
             var devices = await _deviceTopicInfoRepository.GetAllAsync();
+            devices = [.. devices.Where(d => d.DeviceId != incident.UserToReport)];
             
             var filteredDevices = await FilterDevicesByIncidentCategory(devices, incident.Category);
             var filteredTokens = filteredDevices.Select(fd => fd.DeviceId).ToList();

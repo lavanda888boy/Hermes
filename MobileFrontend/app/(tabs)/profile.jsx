@@ -8,7 +8,7 @@ import notificationPreferencesApi from "../../config/axios";
 import SnackBarMessage from "../../components/snackBarMessage";
 
 const Profile = () => {
-  const { fcmToken, incidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
+  const { fcmToken, optionalIncidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
   const [initialCategories, setInitialCategories] = useState([]);
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -19,6 +19,7 @@ const Profile = () => {
     if (initialCategories.length === 0 && selectedCategories.length > 0) {
       setInitialCategories([...selectedCategories]);
     }
+    router.replace("/init");
   }, [selectedCategories]);
 
   const toggleCheckbox = (category) => {
@@ -33,8 +34,6 @@ const Profile = () => {
     try {
       await notificationPreferencesApi.put(`/${fcmToken}`, selectedCategories);
       setInitialCategories([...selectedCategories]);
-
-      router.replace("/home");
     } catch (error) {
       console.log(error);
 
@@ -54,7 +53,7 @@ const Profile = () => {
   return (
     <View className="flex-1 justify-center p-4 bg-white">
       <IncidentCategoryList
-        categories={incidentCategories}
+        categories={optionalIncidentCategories}
         selectedCategories={selectedCategories}
         toggleCheckbox={toggleCheckbox}
       />

@@ -9,8 +9,8 @@ import SubmitButton from "../../components/submitButton";
 import SnackBarMessage from "../../components/snackBarMessage";
 
 const InitScreen = () => {
-  const { fcmToken, incidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
-  const [snackbarVisible, setSnackbarVisible] = useState(true);
+  const { fcmToken, optionalIncidentCategories, selectedCategories, setSelectedCategories } = useContext(ApiContext);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const router = useRouter();
 
@@ -61,7 +61,7 @@ const InitScreen = () => {
         </Text>
 
         <IncidentCategoryList
-          categories={incidentCategories}
+          categories={optionalIncidentCategories}
           selectedCategories={selectedCategories}
           toggleCheckbox={toggleCheckbox}
         />
@@ -69,7 +69,7 @@ const InitScreen = () => {
         <SubmitButton
           title="Continue"
           onPress={handleNotificationPreferencesSubmit}
-          disabled={false}
+          disabled={selectedCategories.length === 0}
         />
 
         <SnackBarMessage

@@ -31,9 +31,9 @@ namespace IncidentRegistrationService.Controllers
         {
             var coordinates = await _redisGPSStorage.GeoPositionAsync(RedisGeoKey, incidentDTO.UserToReport);
 
-            if (coordinates.HasValue)
+            if (coordinates == null)
             {
-                return BadRequest($"No coordinates registered for the device with token: {incidentDTO.UserToReport}");
+                return NotFound($"No coordinates registered for the device with token: {incidentDTO.UserToReport}");
             }
 
             var incident = new Incident
