@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import * as Notifications from "expo-notifications";
 import { notificationPreferencesApi } from "./axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const ApiContext = createContext();
 
@@ -9,8 +10,6 @@ export const ApiContextProvider = ({ children }) => {
   const [allIncidentCategories, setAllIncidentCategories] = useState([]);
   const [optionalIncidentCategories, setOptionalIncidentCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-
-  //TODO: get mandatory categories
 
   useEffect(() => {
     const getFcmToken = async () => {
@@ -24,6 +23,9 @@ export const ApiContextProvider = ({ children }) => {
 
         const tokenResponse = await Notifications.getDevicePushTokenAsync();
         setFcmToken(tokenResponse.data);
+
+        await AsyncStorage.setItem("fcmToken", tokenResponse.data);
+
         console.log("FCM Token:", tokenResponse.data);
       } catch (error) {
         console.error("Error getting FCM token:", error);

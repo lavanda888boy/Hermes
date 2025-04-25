@@ -1,14 +1,15 @@
 import "../global.css";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { ApiContextProvider } from "../config/apiContext.js";
+import { ApiContext, ApiContextProvider } from "../config/apiContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { gpsTrackingApi } from "../config/axios.js";
 import * as Notifications from "expo-notifications";
+import { emitNotificationUpdate } from "../config/notificationEmitter.js";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -44,27 +45,35 @@ const App = () => {
     requestLocationPermissions();
   }, []);
 
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-    }),
-  });
+  useEffect(() => {
+    const handleNotifications = async () => {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: true,
+        }),
+      });
 
-  Notifications.addNotificationReceivedListener(async (notification) => {
-    const notificationData = notification.request.content.data;
+      Notifications.addNotificationReceivedListener(async (notification) => {
+        const notificationData = notification.request.content.data;
 
-    let notifications = await AsyncStorage.getItem("notifications");
-    notifications = notifications ? JSON.parse(notifications) : [];
+        let notifications = await AsyncStorage.getItem("notifications");
+        notifications = notifications ? JSON.parse(notifications) : [];
 
-    notifications.push(notificationData);
-    await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
-  });
+        notifications.push(notificationData);
+        await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
 
-  Notifications.addNotificationResponseReceivedListener(() => {
-    router.replace("/home");
-  });
+        emitNotificationUpdate(notifications);
+      });
+
+      Notifications.addNotificationResponseReceivedListener(() => {
+        router.replace("/home");
+      });
+    }
+
+    handleNotifications();
+  }, []);
 
   const [isLoaded] = useFonts({
     "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),
@@ -110,7 +119,9 @@ TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error 
     const { locations } = data;
 
     try {
-      await gpsTrackingApi.post("/", {
+      const fcmToken = await AsyncStorage.getItem("fcmToken");
+
+      await gpsTrackingApi.post(`/${fcmToken}`, {
         "longitude": locations[0].coords.longitude,
         "latitude": locations[0].coords.latitude
       });

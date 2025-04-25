@@ -1,6 +1,6 @@
 import { SafeAreaView, View, Text, Image } from "react-native";
 import { useContext, useState } from "react";
-import notificationPreferencesApi from "../../config/axios";
+import { notificationPreferencesApi } from "../../config/axios";
 import { ApiContext } from "../../config/apiContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";

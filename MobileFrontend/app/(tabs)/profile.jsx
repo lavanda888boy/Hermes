@@ -19,7 +19,6 @@ const Profile = () => {
     if (initialCategories.length === 0 && selectedCategories.length > 0) {
       setInitialCategories([...selectedCategories]);
     }
-    router.replace("/init");
   }, [selectedCategories]);
 
   const toggleCheckbox = (category) => {
@@ -34,6 +33,8 @@ const Profile = () => {
     try {
       await notificationPreferencesApi.put(`/${fcmToken}`, selectedCategories);
       setInitialCategories([...selectedCategories]);
+
+      router.replace("/home");
     } catch (error) {
       console.log(error);
 
