@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Modal, FlatList, ActivityIndicator } from "react-native";
 import { useState, useEffect } from "react";
 import { notificationListener } from "../../config/notificationEmitter";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,6 +8,7 @@ import IncidentNotificationCard from "../../components/incidentNotificationCard"
 const Home = () => {
   const [incidentReportFormVisible, setIncidentReportFormVisible] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleNotificationUpdate = (updatedNotifications) => {
@@ -21,6 +22,7 @@ const Home = () => {
       const parsedNotifications = savedNotifications ? JSON.parse(savedNotifications) : [];
 
       setNotifications(parsedNotifications);
+      setIsLoading(false);
     };
 
     fetchNotifications();
@@ -37,24 +39,27 @@ const Home = () => {
 
   return (
     <View className="flex-1 justify-between bg-white">
-      <View className="flex-1 p-4">
-        {notifications.length > 0 ? (
-          <View className="flex-1 items-start">
-            {notifications.map((notification, index) => (
-              <IncidentNotificationCard key={index} incidentNotification={notification} />
-            ))}
-          </View>
+      <View className="flex-1 justify-center items-center">
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#1976D2" />
+        ) : notifications.length > 0 ? (
+          <FlatList
+            data={notifications}
+            renderItem={({ item }) => (
+              <IncidentNotificationCard incidentNotification={item} />
+            )}
+            ItemSeparatorComponent={() => <View className="h-4" />}
+            contentContainerStyle={{ width: "90%", paddingTop: 20, paddingBottom: 10, backgroundColor: "white" }}
+          />
         ) : (
-          <View className="flex-1 justify-center items-center">
-            <Text className="text-center text-lg font-ops-r text-gray-400">
-              Here will appear information about the incidents that may have affected you.
-            </Text>
-          </View>
+          <Text className="text-center text-lg font-ops-r text-gray-400">
+            Here will appear information about the incidents that may have affected you.
+          </Text>
         )}
       </View>
 
       <TouchableOpacity
-        className="rounded-3xl w-[180px] py-3 ml-4 mb-10 bg-primary"
+        className="rounded-3xl w-[180px] py-3 ml-4 mt-4 mb-10 bg-primary"
         activeOpacity={0.7}
         onPress={openIncidentReportForm}
       >

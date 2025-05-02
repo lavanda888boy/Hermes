@@ -25,8 +25,6 @@ export const ApiContextProvider = ({ children }) => {
         setFcmToken(tokenResponse.data);
 
         await AsyncStorage.setItem("fcmToken", tokenResponse.data);
-
-        console.log("FCM Token:", tokenResponse.data);
       } catch (error) {
         console.error("Error getting FCM token:", error);
       }
@@ -45,12 +43,14 @@ export const ApiContextProvider = ({ children }) => {
 
         const optionalIncidentCategoriesResponse = await notificationPreferencesApi.get("/optional");
         setOptionalIncidentCategories(optionalIncidentCategoriesResponse.data);
-
-        const selectedCategoriesResponse = await notificationPreferencesApi.get(`/${fcmToken}`);
-        setSelectedCategories(selectedCategoriesResponse.data);
       } catch (error) {
         console.error(error);
       }
+
+      try {
+        const selectedCategoriesResponse = await notificationPreferencesApi.get(`/${fcmToken}`);
+        setSelectedCategories(selectedCategoriesResponse.data);
+      } catch (error) { }
     };
 
     fetchApiData();

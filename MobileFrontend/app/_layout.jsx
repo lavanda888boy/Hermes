@@ -1,9 +1,9 @@
 import "../global.css";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { ApiContext, ApiContextProvider } from "../config/apiContext.js";
+import { ApiContextProvider } from "../config/apiContext.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
@@ -51,23 +51,35 @@ const App = () => {
         handleNotification: async () => ({
           shouldShowAlert: true,
           shouldPlaySound: true,
-          shouldSetBadge: true,
+          shouldSetBadge: false,
         }),
       });
 
-      Notifications.addNotificationReceivedListener(async (notification) => {
-        const notificationData = notification.request.content.data;
-
+      const saveNotification = async (notificationData) => {
         let notifications = await AsyncStorage.getItem("notifications");
         notifications = notifications ? JSON.parse(notifications) : [];
 
-        notifications.push(notificationData);
+        if (notifications.length >= parseInt(process.env.NOTIFICATION_BUFFER_SIZE ?? "10")) {
+          notifications.pop();
+        }
+
+        notifications.unshift(notificationData);
         await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
+        console.log("Saved notifications count:", notifications.length);
 
         emitNotificationUpdate(notifications);
+      };
+
+
+      Notifications.addNotificationReceivedListener(async (notification) => {
+        const data = notification.request.content.data;
+        await saveNotification(data);
       });
 
-      Notifications.addNotificationResponseReceivedListener(() => {
+      Notifications.addNotificationResponseReceivedListener(async (response) => {
+        const data = response.notification.request.content.data;
+        await saveNotification(data);
+
         router.replace("/home");
       });
     }
