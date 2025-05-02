@@ -30,6 +30,23 @@ namespace IncidentRegistrationService.Services
         {
             var deviceTokens = await GetDeviceTokensOfAffectedUsers(incident);
 
+            var notificationMarker = "";
+
+            switch (incident.Severity)
+            {
+                case IncidentSeverity.HIGH:
+                    notificationMarker = "🔴";
+                    break;
+                case IncidentSeverity.MODERATE:
+                    notificationMarker = "🟡";
+                    break;
+                case IncidentSeverity.LOW:
+                    notificationMarker = "🟢";
+                    break;
+                default:
+                    break;
+            }
+
             foreach (var deviceToken in deviceTokens)
             {
                 var notificationData = new Dictionary<string, string>()
@@ -37,6 +54,7 @@ namespace IncidentRegistrationService.Services
                     { "Category", incident.Category },
                     { "AreaRadius", incident.AreaRadius.ToString() },
                     { "Severity", Enum.GetName(typeof(IncidentSeverity), incident.Severity) },
+                    { "Timestamp", incident.Timestamp.ToString("o") },
                     { "Description", incident.Description },
                     { "Note", note }
                 };
@@ -44,6 +62,13 @@ namespace IncidentRegistrationService.Services
                 var message = new Message()
                 {
                     Token = deviceToken,
+
+                    Notification = new Notification
+                    {
+                        Title = $"{notificationMarker} {incident.Category} Alert",
+                        Body = incident.Description
+                    },
+
                     Data = notificationData,
                 };
 
@@ -54,6 +79,7 @@ namespace IncidentRegistrationService.Services
         private async Task<List<string>> GetDeviceTokensOfAffectedUsers(Incident incident)
         {
             var devices = await _deviceTopicInfoRepository.GetAllAsync();
+            devices = [.. devices.Where(d => d.DeviceId != incident.UserToReport)];
             
             var filteredDevices = await FilterDevicesByIncidentCategory(devices, incident.Category);
             var filteredTokens = filteredDevices.Select(fd => fd.DeviceId).ToList();

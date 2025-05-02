@@ -8,6 +8,8 @@ import { useRouter, Slot } from "expo-router";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { gpsTrackingApi } from "../config/axios.js";
+import * as Notifications from "expo-notifications";
+import { emitNotificationUpdate } from "../config/notificationEmitter.js";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,11 +38,53 @@ const App = () => {
           distanceInterval: parseInt(process.env.LOCATION_TRACKING_DISTANCE_INTERVAL),
         });
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     };
 
     requestLocationPermissions();
+  }, []);
+
+  useEffect(() => {
+    const handleNotifications = async () => {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        }),
+      });
+
+      const saveNotification = async (notificationData) => {
+        let notifications = await AsyncStorage.getItem("notifications");
+        notifications = notifications ? JSON.parse(notifications) : [];
+
+        if (notifications.length >= parseInt(process.env.NOTIFICATION_BUFFER_SIZE ?? "10")) {
+          notifications.pop();
+        }
+
+        notifications.unshift(notificationData);
+        await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
+        console.log("Saved notifications count:", notifications.length);
+
+        emitNotificationUpdate(notifications);
+      };
+
+
+      Notifications.addNotificationReceivedListener(async (notification) => {
+        const data = notification.request.content.data;
+        await saveNotification(data);
+      });
+
+      Notifications.addNotificationResponseReceivedListener(async (response) => {
+        const data = response.notification.request.content.data;
+        await saveNotification(data);
+
+        router.replace("/home");
+      });
+    }
+
+    handleNotifications();
   }, []);
 
   const [isLoaded] = useFonts({
@@ -61,7 +105,7 @@ const App = () => {
       if (deviceRegistered === "true") {
         router.replace("/home");
       } else {
-        router.replace("/");
+        router.replace("/init");
       }
     };
 
@@ -78,7 +122,6 @@ const App = () => {
 export default App;
 
 TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error }) => {
-  console.log("hi")
   if (error) {
     console.log('LOCATION_TRACKING task ERROR:', error);
     return;
@@ -88,12 +131,14 @@ TaskManager.defineTask(process.env.LOCATION_TRACKING_TASK, async ({ data, error 
     const { locations } = data;
 
     try {
-      await gpsTrackingApi.post("/", {
+      const fcmToken = await AsyncStorage.getItem("fcmToken");
+
+      await gpsTrackingApi.post(`/${fcmToken}`, {
         "longitude": locations[0].coords.longitude,
         "latitude": locations[0].coords.latitude
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 });

@@ -20,7 +20,14 @@ public class NotificationPreferencesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<string>> GetNotificationPreferenceOptions()
+    public async Task<List<string>> GetAllNotificationPreferenceOptions()
+    {
+        var preferences = await _notificationPreferenceRepository.GetAllAsync();
+        return [.. preferences.Select(p => p.PreferenceName)];
+    }
+
+    [HttpGet("/optional")]
+    public async Task<List<string>> GetOptionalNotificationPreferenceOptions()
     {
         var preferences = await _notificationPreferenceRepository.GetFilteredAsync("Optional");
         return [.. preferences.Select(p => p.PreferenceName)];
