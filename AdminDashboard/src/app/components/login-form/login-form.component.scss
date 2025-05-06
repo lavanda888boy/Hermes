@@ -1,5 +1,5 @@
-$primary-button-color: #42a5d3;
-$secondary-button-color: #48cae4;
+$primary-button-color: #1976D2;
+$secondary-button-color: #2196F3;
 
 .login-form-container {
   width: 300px;
@@ -13,6 +13,7 @@ $secondary-button-color: #48cae4;
 
   .login-form-name {
     font-size: 2rem;
+    text-align: center;
   }
 
   .login-form-body {
@@ -35,6 +36,7 @@ $secondary-button-color: #48cae4;
     .login-form-button:hover {
       cursor: pointer;
       background-color: $secondary-button-color;
+      border: 1px solid $secondary-button-color;
     }
 
     .login-form-button:disabled {

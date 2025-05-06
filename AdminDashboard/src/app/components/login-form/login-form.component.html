@@ -9,10 +9,6 @@
       <mat-error *ngIf="loginForm.get('name')?.hasError('required')">
         Name is required.
       </mat-error>
-
-      <mat-error *ngIf="loginForm.get('name')?.hasError('minlength') || loginForm.get('name')?.hasError('maxlength')">
-        Name is invalid.
-      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">

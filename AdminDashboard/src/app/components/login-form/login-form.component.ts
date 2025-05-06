@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgIf } from '@angular/common';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { User } from '../../models/user';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-form',
@@ -22,11 +24,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 export class LoginFormComponent {
   loginForm = new FormGroup({
-    name: new FormControl('', [
-      Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(15)
-    ]),
+    name: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
   });
 
@@ -37,19 +35,32 @@ export class LoginFormComponent {
   ) { }
 
   async handleSubmit(): Promise<void> {
-    const name = this.loginForm.value.name!;
-    const password = this.loginForm.value.password!;
+    const user: User = {
+      userName: this.loginForm.value.name!,
+      password: this.loginForm.value.password!
+    };
 
-    const loginResult = await this.authService.loginUser(name, password);
-
-    if (loginResult) {
+    try {
+      await this.authService.login(user);
       this.router.navigate(['/'], { replaceUrl: true });
-    } else {
-      this.loginForm.reset();
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        let snackBarMessage = '';
 
-      this.snackBar.open('⛔ Login failed. Invalid credentials.', 'Close', {
-        duration: 3000
-      });
+        if (error.status === 400) {
+          snackBarMessage = '⛔ Login failed. Invalid credentials.';
+        } else {
+          snackBarMessage = '⛔ Something went wrong. Please try again later.';
+        }
+
+        this.snackBar.open(snackBarMessage, 'Close', {
+          duration: 3000
+        });
+
+        console.log('Error:', error);
+      }
+
+      this.loginForm.reset();
     }
   }
 }

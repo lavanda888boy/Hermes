@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginFormComponent } from '../../login-form/login-form.component';
+import { LoginFormComponent } from '../../components/login-form/login-form.component';
 
 @Component({
   standalone: true,
