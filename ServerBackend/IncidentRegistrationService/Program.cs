@@ -1,6 +1,7 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using IncidentRegistrationService.Filters;
+using IncidentRegistrationService.Hubs;
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using IncidentRegistrationService.Services;
@@ -22,6 +23,23 @@ namespace IncidentRegistrationService
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                             .AddJwtBearer(options =>
                             {
+                                options.Events = new JwtBearerEvents
+                                {
+                                    OnMessageReceived = context =>
+                                    {
+                                        var accessToken = context.Request.Query["access_token"];
+
+                                        var path = context.HttpContext.Request.Path;
+
+                                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/incidentHub"))
+                                        {
+                                            context.Token = accessToken;
+                                        }
+
+                                        return Task.CompletedTask;
+                                    }
+                                };
+
                                 options.TokenValidationParameters = new TokenValidationParameters
                                 {
                                     ValidateIssuer = true,
@@ -56,6 +74,8 @@ namespace IncidentRegistrationService
 
             builder.AddRedisClient(connectionName: "gps-storage");
 
+            builder.Services.AddSignalR();
+
             builder.Services.AddScoped<IIncidentCorrelationService, IncidentCorrelationService>();
             builder.Services.AddScoped<INotificationTransmissionService, NotificationTransmissionService>();
             
@@ -68,6 +88,8 @@ namespace IncidentRegistrationService
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapHub<IncidentHub>("/incidentHub");
 
             app.Run();
         }

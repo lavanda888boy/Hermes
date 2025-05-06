@@ -12,6 +12,12 @@ html {
     ));
 }
 
+:root {
+  @include mat.tabs-overrides((active-indicator-color: #2196F3,
+      active-focus-indicator-color: #2196F3,
+      active-hover-indicator-color: #1976D2));
+}
+
 /* You can add global styles to this file, and also import other style files */
 
 html,
