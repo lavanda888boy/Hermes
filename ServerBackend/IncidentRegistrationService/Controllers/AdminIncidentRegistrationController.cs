@@ -24,9 +24,9 @@ namespace IncidentRegistrationService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllIncidentsForValidation()
+        public async Task<IActionResult> GetAllIncidentsByStatus([FromQuery] string status)
         {
-            var incidents = await _incidentRepository.GetFilteredAsync("Pending");
+            var incidents = await _incidentRepository.GetFilteredAsync(status);
 
             var incidentDtos = incidents.Select(incident => new AdminIncidentResponse
             {
