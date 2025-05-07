@@ -83,7 +83,20 @@ namespace IncidentRegistrationService
             builder.Services.AddScoped<IRepository<DeviceTopicInfo>, DeviceTopicInfoRepository>();
             builder.Services.AddScoped<IRepository<NotificationPreference>, NotificationPreferenceRepository>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontendAccess", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+                });
+            });
+
             var app = builder.Build();
+
+            app.UseCors("AllowFrontendAccess");
 
             app.UseAuthorization();
 
