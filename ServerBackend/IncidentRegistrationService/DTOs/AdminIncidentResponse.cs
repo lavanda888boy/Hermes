@@ -10,7 +10,9 @@ namespace IncidentRegistrationService.Responses
 
         public required string Category { get; init; }
 
-        public double? AreaRadius { get; set; }
+        public string? Severity { get; init; }
+
+        public double? AreaRadius { get; init; }
 
         public required DateTimeOffset Timestamp { get; init; }
 

@@ -1,15 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { IncidentRegistrationService } from '../../services/incident-registration.service';
 import { Incident } from '../../models/incident';
+import { IncidentTableComponent } from '../../components/incident-table/incident-table.component';
 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
   imports: [
     HeaderComponent,
-    MatTabsModule
+    IncidentTableComponent,
+    MatTabsModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -18,6 +20,8 @@ import { Incident } from '../../models/incident';
 export class DashboardComponent implements OnInit {
   reportedIncidents: Incident[] = [];
   validIncidents: Incident[] = [];
+
+  columnVisibility: string = 'partial';
 
   constructor(private incidentRegistrationService: IncidentRegistrationService) { }
 
@@ -37,6 +41,7 @@ export class DashboardComponent implements OnInit {
     this.incidentRegistrationService.validIncidents$.subscribe({
       next: (data) => {
         this.validIncidents = data;
+        console.log('Valid Incidents:', this.validIncidents);
       },
       error: (error) => {
         console.error(error);

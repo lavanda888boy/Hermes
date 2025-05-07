@@ -32,6 +32,7 @@ namespace IncidentRegistrationService.Controllers
             {
                 Id = incident.Id,
                 Category = incident.Category,
+                Severity = Enum.GetName(typeof(IncidentSeverity), incident.Severity),
                 AreaRadius = incident.AreaRadius,
                 Timestamp = incident.Timestamp,
                 Longitude = incident.Longitude,
