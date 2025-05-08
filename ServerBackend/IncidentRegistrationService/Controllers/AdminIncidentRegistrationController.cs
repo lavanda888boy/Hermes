@@ -60,14 +60,15 @@ namespace IncidentRegistrationService.Controllers
                 Description = incidentDTO.Description
             };
 
-            await _incidentRepository.AddAsync(incident);
+            var newIncident = await _incidentRepository.AddAsync(incident);
             await _notificationTransmissionService.SendIncidentNotification(incident);
 
-            return Ok();
+            return Ok(newIncident.Id);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateOrValidateIncidentDetails([FromBody] AdminIncidentRequest incidentDTO)
+        public async Task<IActionResult> UpdateOrValidateIncidentDetails([FromBody] AdminIncidentRequest incidentDTO,
+            [FromQuery] string status = "Validate")
         {
             var incidentToUpdate = await _incidentRepository.GetByIdAsync(incidentDTO.Id);
 
@@ -85,13 +86,21 @@ namespace IncidentRegistrationService.Controllers
             incidentToUpdate.Description = incidentDTO.Description;
 
             await _incidentRepository.UpdateAsync(incidentToUpdate);
-            await _notificationTransmissionService.SendIncidentNotification(incidentToUpdate);
+
+            if (status != "Validate")
+            {
+                await _notificationTransmissionService.SendIncidentNotification(incidentToUpdate, "This is a follow up notification.");
+            } 
+            else
+            {
+                await _notificationTransmissionService.SendIncidentNotification(incidentToUpdate);
+            }
 
             return Ok(incidentToUpdate.Id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRegisteredIncident(string id)
+        public async Task<IActionResult> DeleteRegisteredIncident(string id, [FromQuery] string actor = "User")
         {
             var incidentToDelete = await _incidentRepository.GetByIdAsync(id);
 
@@ -102,8 +111,11 @@ namespace IncidentRegistrationService.Controllers
 
             await _incidentRepository.DeleteAsync(incidentToDelete);
 
-            string note = "This incident was added by mistake or no longer affects the area.";
-            await _notificationTransmissionService.SendIncidentNotification(incidentToDelete, note);
+            if (actor != "User")
+            {
+                string note = "This incident was added by mistake or no longer affects the area.";
+                await _notificationTransmissionService.SendIncidentNotification(incidentToDelete, note);
+            }
 
             return Ok(id);
         }

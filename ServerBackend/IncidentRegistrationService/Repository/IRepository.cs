@@ -17,7 +17,7 @@
             throw new NotImplementedException("GetFilteredAsync is not implemented.");
         }
 
-        Task AddAsync(T entity)
+        Task<T> AddAsync(T entity)
         {
             throw new NotImplementedException("AddAsync is not implemented.");
         }

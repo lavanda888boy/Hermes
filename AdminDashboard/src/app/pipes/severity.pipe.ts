@@ -12,7 +12,7 @@ export class SeverityPipe implements PipeTransform {
       case 'LOW':
         output = '🟢';
         break;
-      case 'MEDIUM':
+      case 'MODERATE':
         output = '🟡';
         break;
       case 'HIGH':

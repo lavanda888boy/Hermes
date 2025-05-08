@@ -1,4 +1,5 @@
 export interface Incident {
+  id: string;
   category: string;
   severity: string | null;
   areaRadius: number;

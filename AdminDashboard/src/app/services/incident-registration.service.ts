@@ -78,4 +78,87 @@ export class IncidentRegistrationService {
   getValidIncidents(): Observable<Incident[]> {
     return this.validIncidents$;
   }
+
+  registerIncident(incident: Incident): void {
+    const incidentRequest = {
+      category: incident.category,
+      severity: incident.severity,
+      areaRadius: incident.areaRadius,
+      longitude: incident.longitude,
+      latitude: incident.latitude,
+      description: incident.description
+    };
+
+    this.http.post(this.apiUrl, incidentRequest, { responseType: 'text' }).subscribe({
+      next: () => {
+        this.loadValidIncidents();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  updateReportedIncident(incident: Incident): void {
+    this.http.put(this.apiUrl, incident, { responseType: 'text' }).subscribe({
+      next: () => {
+        const currentIncidents = this.reportedIncidentsSource.getValue();
+        const updatedReportedIncidents = currentIncidents.filter(inc => inc.id !== incident.id);
+
+        this.reportedIncidentsSource.next(updatedReportedIncidents);
+        this.validIncidentsSource.next([...this.validIncidentsSource.getValue(), incident]);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  updateValidIncident(incident: Incident): void {
+    const params = new HttpParams().set('status', 'Update');
+
+    this.http.put(this.apiUrl, incident, { params: params, responseType: 'text' }).subscribe({
+      next: () => {
+        const currentIncidents = this.validIncidentsSource.getValue();
+        const updatedIncidents = currentIncidents.map(inc =>
+          inc.id === incident.id ? { ...inc, ...incident } : inc
+        );
+
+        this.validIncidentsSource.next(updatedIncidents);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  deleteReportedIncident(id: string): void {
+    this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' }).subscribe({
+      next: () => {
+        const currentIncidents = this.reportedIncidentsSource.getValue();
+        const updatedIncidents = currentIncidents.filter(incident => incident.id !== id);
+
+        this.reportedIncidentsSource.next(updatedIncidents);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  deleteValidIncident(id: string): void {
+    const params = new HttpParams().set('actor', 'Admin');
+
+    this.http.delete(`${this.apiUrl}/${id}`, { params: params, responseType: 'text' }).subscribe({
+      next: () => {
+        const currentIncidents = this.validIncidentsSource.getValue();
+        const updatedIncidents = currentIncidents.filter(incident => incident.id !== id);
+
+        this.validIncidentsSource.next(updatedIncidents);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
 }

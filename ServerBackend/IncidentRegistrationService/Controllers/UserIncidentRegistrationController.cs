@@ -45,6 +45,7 @@ namespace IncidentRegistrationService.Controllers
             var incident = new Incident
             {
                 Category = incidentDTO.Category,
+                Severity = IncidentSeverity.LOW,
                 AreaRadius = 0,
                 Timestamp = DateTimeOffset.UtcNow,
                 Longitude = coordinates.Value.Longitude,
@@ -61,10 +62,10 @@ namespace IncidentRegistrationService.Controllers
             }
 
             incident.Status = "Pending";
-            await _incidentRepository.AddAsync(incident);
+            var newIncident = await _incidentRepository.AddAsync(incident);
             await _hubContext.Clients.All.SendAsync("ReceiveIncident", incident);
 
-            return Ok(incident.UserToReport);
+            return Ok(newIncident.Id);
         } 
     }
 }

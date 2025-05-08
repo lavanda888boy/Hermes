@@ -13,9 +13,10 @@ namespace IncidentRegistrationService.Repository
             _incidentCollection = mongoDatabase.GetCollection<Incident>("Incidents");
         }
 
-        public async Task AddAsync(Incident entity)
+        public async Task<Incident> AddAsync(Incident entity)
         {
             await _incidentCollection.InsertOneAsync(entity);
+            return entity;
         }
 
         public async Task DeleteAsync(Incident entity)

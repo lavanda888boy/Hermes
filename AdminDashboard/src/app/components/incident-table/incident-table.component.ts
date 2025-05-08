@@ -7,6 +7,9 @@ import { SeverityPipe } from '../../pipes/severity.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { IncidentRegistrationService } from '../../services/incident-registration.service';
+import { IncidentFormComponent } from '../incident-form/incident-form.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-incident-table',
@@ -15,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatDialogModule,
     DatePipe,
     SeverityPipe,
     CoordinatesPipe
@@ -27,6 +31,8 @@ export class IncidentTableComponent {
   @Input() incidents: Incident[] = [];
   @Input() columnVisibility: string = 'full';
 
+  selectedIncident: Incident | null = null;
+
   displayedColumns: string[] = [
     'category',
     'severity',
@@ -38,11 +44,44 @@ export class IncidentTableComponent {
     'actions'
   ];
 
-  constructor() { }
+  constructor(
+    private incidentRegistrationService: IncidentRegistrationService,
+    private dialog: MatDialog
+  ) { }
 
   getDisplayedColumns(): string[] {
     return this.columnVisibility === 'full'
       ? this.displayedColumns
       : this.displayedColumns.filter(col => !['severity', 'areaRadius'].includes(col));
+  }
+
+  setSelectedIncident(incident: Incident): void {
+    this.selectedIncident = incident;
+  }
+
+  openIncidentReportDialog(): void {
+    const dialogRef = this.dialog.open(IncidentFormComponent, {
+      width: "600px",
+      height: "550px",
+      data: this.selectedIncident
+    });
+
+    dialogRef.afterClosed().subscribe((result: Incident | null) => {
+      if (result) {
+        if (this.columnVisibility === 'full') {
+          this.incidentRegistrationService.updateValidIncident(result);
+        } else {
+          this.incidentRegistrationService.updateReportedIncident(result);
+        }
+      }
+    });
+  }
+
+  handleDeleteIncident(): void {
+    if (this.columnVisibility === 'full') {
+      this.incidentRegistrationService.deleteValidIncident(this.selectedIncident!.id);
+    } else {
+      this.incidentRegistrationService.deleteReportedIncident(this.selectedIncident!.id);
+    }
   }
 }

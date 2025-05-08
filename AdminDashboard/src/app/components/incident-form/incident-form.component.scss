@@ -1,0 +1,38 @@
+$primary-button-color: #1976D2;
+$secondary-button-color: #2196F3;
+
+.incident-form-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin-top: 10px;
+
+  .incident-form-coordinates {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.incident-form-button {
+  width: 150px;
+  padding: 7px 0;
+  background-color: $primary-button-color;
+  color: white;
+  border: 1px solid $primary-button-color;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.incident-form-button:hover {
+  cursor: pointer;
+  background-color: $secondary-button-color;
+}
+
+.incident-form-button:disabled {
+  cursor: default;
+  border: none;
+  background-color: lightgray;
+  color: white;
+}
