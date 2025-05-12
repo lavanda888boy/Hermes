@@ -1,8 +1,10 @@
 ﻿using IncidentRegistrationService.DTOs;
+using IncidentRegistrationService.Hubs;
 using IncidentRegistrationService.Models;
 using IncidentRegistrationService.Repository;
 using IncidentRegistrationService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using StackExchange.Redis;
 
 namespace IncidentRegistrationService.Controllers
@@ -17,13 +19,17 @@ namespace IncidentRegistrationService.Controllers
         private readonly IDatabase _redisGPSStorage;
         private readonly string RedisGeoKey = "device_locations";
 
+        private readonly IHubContext<IncidentHub> _hubContext;
+
         public UserIncidentRegistrationController(IRepository<Incident> incidentRepository,
             IIncidentCorrelationService incidentCorrelationService,
-            IConnectionMultiplexer connectionMultiplexer)
+            IConnectionMultiplexer connectionMultiplexer,
+            IHubContext<IncidentHub> hubContext)
         {
             _incidentRepository = incidentRepository;
             _incidentCorrelationService = incidentCorrelationService;
             _redisGPSStorage = connectionMultiplexer.GetDatabase();
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -39,6 +45,7 @@ namespace IncidentRegistrationService.Controllers
             var incident = new Incident
             {
                 Category = incidentDTO.Category,
+                Severity = IncidentSeverity.LOW,
                 AreaRadius = 0,
                 Timestamp = DateTimeOffset.UtcNow,
                 Longitude = coordinates.Value.Longitude,
@@ -55,9 +62,10 @@ namespace IncidentRegistrationService.Controllers
             }
 
             incident.Status = "Pending";
-            await _incidentRepository.AddAsync(incident);
+            var newIncident = await _incidentRepository.AddAsync(incident);
+            await _hubContext.Clients.All.SendAsync("ReceiveIncident", newIncident);
 
-            return Ok(incident.UserToReport);
+            return Ok(newIncident.Id);
         } 
     }
 }

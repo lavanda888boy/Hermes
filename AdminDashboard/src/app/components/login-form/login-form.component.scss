@@ -1,0 +1,49 @@
+$primary-button-color: #1976D2;
+$secondary-button-color: #2196F3;
+
+.login-form-container {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+
+  .login-form-name {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .login-form-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    .login-form-button {
+      width: 150px;
+      align-self: center;
+      padding: 7px 0;
+      margin-top: 10px;
+      background-color: $primary-button-color;
+      color: white;
+      border: 1px solid $primary-button-color;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .login-form-button:hover {
+      cursor: pointer;
+      background-color: $secondary-button-color;
+      border: 1px solid $secondary-button-color;
+    }
+
+    .login-form-button:disabled {
+      cursor: default;
+      border: none;
+      background-color: lightgray;
+      color: white;
+    }
+  }
+}
