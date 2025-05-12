@@ -63,7 +63,7 @@ namespace IncidentRegistrationService.Controllers
 
             incident.Status = "Pending";
             var newIncident = await _incidentRepository.AddAsync(incident);
-            await _hubContext.Clients.All.SendAsync("ReceiveIncident", incident);
+            await _hubContext.Clients.All.SendAsync("ReceiveIncident", newIncident);
 
             return Ok(newIncident.Id);
         } 

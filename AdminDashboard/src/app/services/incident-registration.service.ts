@@ -28,7 +28,8 @@ export class IncidentRegistrationService {
   private startSignalRConnection(): void {
     this.hubConnection = new signalr.HubConnectionBuilder()
       .withUrl(this.hubUrl, {
-        transport: signalr.HttpTransportType.ServerSentEvents,
+        skipNegotiation: true,
+        transport: signalr.HttpTransportType.WebSockets,
         accessTokenFactory: () => localStorage.getItem('token') || ''
       })
       .withAutomaticReconnect()

@@ -96,13 +96,15 @@ namespace IncidentRegistrationService
 
             var app = builder.Build();
 
+            app.UseWebSockets();
+
             app.UseCors("AllowFrontendAccess");
 
             app.UseAuthorization();
 
-            app.MapControllers();
-
             app.MapHub<IncidentHub>("/incidentHub");
+
+            app.MapControllers();
 
             app.Run();
         }
