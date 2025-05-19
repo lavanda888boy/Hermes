@@ -82,10 +82,10 @@ export class IncidentFormComponent implements OnInit {
       category: formValue.category!,
       severity: formValue.severity!,
       areaRadius: formValue.areaRadius!,
-      timestamp: '',
+      timestamp: this.incident ? this.incident.timestamp : '',
       longitude: formValue.longitude!,
       latitude: formValue.latitude!,
-      userToReport: '',
+      userToReport: this.incident ? this.incident.userToReport : '',
       status: '',
       description: formValue.description!
     };

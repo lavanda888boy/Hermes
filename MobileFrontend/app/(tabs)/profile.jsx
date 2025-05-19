@@ -4,7 +4,7 @@ import { ApiContext } from "../../config/apiContext";
 import IncidentCategoryList from "../../components/incidentCategoryList";
 import SubmitButton from "../../components/submitButton";
 import { useRouter } from "expo-router";
-import notificationPreferencesApi from "../../config/axios";
+import { notificationPreferencesApi } from "../../config/axios";
 import SnackBarMessage from "../../components/snackBarMessage";
 
 const Profile = () => {

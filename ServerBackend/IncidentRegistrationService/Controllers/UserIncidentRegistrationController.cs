@@ -10,7 +10,7 @@ using StackExchange.Redis;
 namespace IncidentRegistrationService.Controllers
 {
     [ApiController]
-    [Route("/")]
+    [Route("/user")]
     public class UserIncidentRegistrationController : ControllerBase
     {
         private readonly IRepository<Incident> _incidentRepository;

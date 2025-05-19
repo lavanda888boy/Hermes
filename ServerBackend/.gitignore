@@ -406,3 +406,4 @@ FodyWeavers.xsd
 
 *.env
 hermes-firebase-adminsdk.json
+.azure

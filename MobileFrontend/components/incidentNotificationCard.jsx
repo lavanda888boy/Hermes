@@ -9,8 +9,8 @@ const IncidentNotificationCard = ({ incidentNotification }) => {
       case "HIGH":
         subtitle = "🔴 High severity incident";
         break;
-      case "MEDIUM":
-        subtitle = "🟡 Medium severity incident";
+      case "MODERATE":
+        subtitle = "🟡 Moderate severity incident";
         break;
       case "LOW":
         subtitle = "🟢 Low severity incident";
@@ -34,7 +34,7 @@ const IncidentNotificationCard = ({ incidentNotification }) => {
   }
 
   return (
-    <Card>
+    <Card style={{ width: "350" }}>
       <Card.Title
         title={incidentNotification.Category}
         subtitle={getNotificationSubtitle()}

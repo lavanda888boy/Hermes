@@ -15,7 +15,7 @@ const gpsTrackingApi = axios.create({
 });
 
 const incidentRegistrationApi = axios.create({
-  baseURL: `${process.env.API_GATEWAY_URL}/incident-registration`,
+  baseURL: `${process.env.API_GATEWAY_URL}/incident-registration/user`,
   headers: {
     "Content-Type": "application/json",
   }

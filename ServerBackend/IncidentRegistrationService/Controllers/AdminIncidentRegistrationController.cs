@@ -85,6 +85,11 @@ namespace IncidentRegistrationService.Controllers
             incidentToUpdate.Status = "Approved";
             incidentToUpdate.Description = incidentDTO.Description;
 
+            if (status != "Validate")
+            {
+                incidentToUpdate.Timestamp = DateTimeOffset.UtcNow;
+            }
+
             await _incidentRepository.UpdateAsync(incidentToUpdate);
 
             if (status != "Validate")
@@ -107,6 +112,11 @@ namespace IncidentRegistrationService.Controllers
             if (incidentToDelete == null)
             {
                 return BadRequest($"There is no registered incident with id: {id}");
+            }
+
+            if (actor != "User")
+            {
+                incidentToDelete.Timestamp = DateTimeOffset.UtcNow;
             }
 
             await _incidentRepository.DeleteAsync(incidentToDelete);

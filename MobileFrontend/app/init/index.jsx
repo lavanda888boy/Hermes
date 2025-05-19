@@ -56,8 +56,8 @@ const InitScreen = () => {
         <Text className="text-lg text-primary text-justify font-ops-r px-4 mt-4">
           You're going to be automatically subscribed to critical incident notifications
           (earthquakes, floods, wildfires, etc.). If you wish you can also subscribe to some
-          additional notifications from the list below. Your preferences can be
-          later change.
+          additional notifications from the list below. Your preferences can be later changed
+          in the profile section.
         </Text>
 
         <IncidentCategoryList

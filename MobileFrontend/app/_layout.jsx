@@ -65,7 +65,6 @@ const App = () => {
 
         notifications.unshift(notificationData);
         await AsyncStorage.setItem("notifications", JSON.stringify(notifications));
-        console.log("Saved notifications count:", notifications.length);
 
         emitNotificationUpdate(notifications);
       };

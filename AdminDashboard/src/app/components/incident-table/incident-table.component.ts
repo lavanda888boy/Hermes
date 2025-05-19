@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IncidentRegistrationService } from '../../services/incident-registration.service';
 import { IncidentFormComponent } from '../incident-form/incident-form.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-incident-table',
@@ -19,6 +20,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatMenuModule,
     MatDialogModule,
+    MatTooltipModule,
     DatePipe,
     SeverityPipe,
     CoordinatesPipe
