@@ -21,6 +21,8 @@ All of these features are related to the particular components of the system: th
 
 The following UML component diagram presented the general structure of this real-time notification system:
 
+![Architecture](./.github/images/component_diagram.png)
+
 The diagram demonstrates the main components of the system: **Remote Backend Server** and **Client Mobile Application**. The **AdminDashboard** is not taken into consideration as its structure is relatively simple and does not require long explanations (its interface can be viewed in the demo section).
 
 The **Remote Backend Server** represents a distributed application based on four major microservices with a gateway in front of them:
@@ -55,7 +57,51 @@ The communication between the client components of the system and the server are
 
 #### Server Backend
 
+In order to start the .NET Aspire distributed application it is necessary to add files with secrets to the certain microservices. The general appearance of a `.env` file shared by the services is the following:
+
+```env
+MONGODB_CONNECTION_STRING=mongodb+srv://<<your_user>>:<<your_password>>@master.r1peu.mongodb.net/?<<your_auth_source>>=&appName=<<your_app_name>>
+MONGODB_DATABASE=<<your_db_name>>
+
+JWT_SECRET=<<your_jwt_secret>>
+JWT_ISSUER=HermesBackend
+JWT_AUDIENCE=HermesMobileApp
+JWT_LIFETIME_MINUTES=30
+```
+
+All of the secrets are required only by the **IncidentRegistrationService** and **AdminAuthnticationService**. The **NotificationPreferencesService** only needs to contain the MongoDb connection data. This file should be placed at the root of each service directory.
+
+
+1. Once you are finished with the previous steps run the following command from the `ServerBackend` folder (or open the `ServerBackend` solution in Visual Studio):
+
+   ```bash
+   dotnet run
+   ```
+
+2. By default the .NET Aspire dashboard will be available at `http://localhost:17206`
+
 #### Mobile Client
+
+In order to test the Expo mobile client you need to add files with secrets to the root of the `MobileFrontend` directory. The general appearance of a `.env` file is the following (do not forget that the ip address of the .NET Aspire app should be without `localhost` in case of local development, but instead 192.168....):
+
+```env
+API_GATEWAY_URL=<<ip_address_of_the_.net_aspire_app>>
+LOCATION_TRACKING_TASK=location-tracking
+LOCATION_TRACKING_TIME_INTERVAL=15000
+LOCATION_TRACKING_DISTANCE_INTERVAL=100
+NOTIFICATION_BUFFER_SIZE=20
+```
+
+1. Once all the files are prepared you can open the `/android/app` folder in Android Studio, build and run it as a project. 
+
+2. Also run the following commands from the root of the `MobileFrontend` folder to start the Metro Server:
+
+   ```bash
+   npm install
+   npx expo start
+   ```
+
+The output of the last command will show you the Metro Server url and the qr code to test the app using Expo Go from your phone. However, the functionality of the app will be limited, so it's better to use an emulator in Android Studio.
 
 #### Admin Web Client
 

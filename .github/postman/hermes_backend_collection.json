@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "1e03c13f-e519-4e5f-9b56-87b283324b1d",
+		"name": "Hermes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24508467"
+	},
+	"item": [
+		{
+			"name": "Notification preferences service",
+			"item": [
+				{
+					"name": "get_all_notification_preference_options",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{notification_preferences_address}}",
+							"host": [
+								"{{notification_preferences_address}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register_notification_preferences",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"Weather & Air Quality\",\r\n    \"Traffic & Transportation Updates\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{notification_preferences_address}}/blabla",
+							"host": [
+								"{{notification_preferences_address}}"
+							],
+							"path": [
+								"blabla"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_notification_preferences_by_device_token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{notification_preferences_address}}/fJmtlzQTTjWFt6CB4MlFqB:APA91bFu_5DwhTgqMrqYHPolt80_TDDznZnH0gS1urjuDcW6tZH0dRN3q4ffjP0MVjfKrWPtV7lGun_2s0OhN79PpNVIbVArTf-bQJCcTQ_cxP7oAATz1x8",
+							"host": [
+								"{{notification_preferences_address}}"
+							],
+							"path": [
+								"fJmtlzQTTjWFt6CB4MlFqB:APA91bFu_5DwhTgqMrqYHPolt80_TDDznZnH0gS1urjuDcW6tZH0dRN3q4ffjP0MVjfKrWPtV7lGun_2s0OhN79PpNVIbVArTf-bQJCcTQ_cxP7oAATz1x8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_notification_preferences",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"Health & Safety Alerts\",\r\n    \"Infrastructure & Service Disruptions\",\r\n    \"Traffic & Transportation Updates\",\r\n    \"Weather & Air Quality\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{notification_preferences_address}}/fJmtlzQTTjWFt6CB4MlFqB:APA91bFu_5DwhTgqMrqYHPolt80_TDDznZnH0gS1urjuDcW6tZH0dRN3q4ffjP0MVjfKrWPtV7lGun_2s0OhN79PpNVIbVArTf-bQJCcTQ_cxP7oAATz1x8",
+							"host": [
+								"{{notification_preferences_address}}"
+							],
+							"path": [
+								"fJmtlzQTTjWFt6CB4MlFqB:APA91bFu_5DwhTgqMrqYHPolt80_TDDznZnH0gS1urjuDcW6tZH0dRN3q4ffjP0MVjfKrWPtV7lGun_2s0OhN79PpNVIbVArTf-bQJCcTQ_cxP7oAATz1x8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_optional_notification_preference_options",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{notification_preferences_address}}/optional",
+							"host": [
+								"{{notification_preferences_address}}"
+							],
+							"path": [
+								"optional"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GPS Location Tracking Service",
+			"item": [
+				{
+					"name": "get_device_location_by_device_token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gps_location_tracking_address}}/blabla",
+							"host": [
+								"{{gps_location_tracking_address}}"
+							],
+							"path": [
+								"blabla"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set_device_GPS_location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"longitude\": -126.5845,\r\n    \"latitude\": 37.8258\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gps_location_tracking_address}}/blabla",
+							"host": [
+								"{{gps_location_tracking_address}}"
+							],
+							"path": [
+								"blabla"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin authentication service",
+			"item": [
+				{
+					"name": "login_admin_user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Admin\",\r\n    \"password\": \"Admin12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin_authentication_address}}",
+							"host": [
+								"{{admin_authentication_address}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register_admin_user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Admin\",\r\n    \"password\": \"Admin12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{admin_authentication_address}}/register",
+							"host": [
+								"{{admin_authentication_address}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Incident registration service",
+			"item": [
+				{
+					"name": "Admin endpoints",
+					"item": [
+						{
+							"name": "get_all_incidents_by_status",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{incident_registration_address}}/admin?status=Pending",
+									"host": [
+										"{{incident_registration_address}}"
+									],
+									"path": [
+										"admin"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "Pending"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "register_new_incident",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category\": \"Weather & Air Quality\",\r\n    \"severity\": \"MODERATE\",\r\n    \"areaRadius\": 1000,\r\n    \"longitude\": -122.4194,\r\n    \"latitude\": 37.7749,\r\n    \"description\": \"An accident happened here and it's important. Be careful and do not do anything stupid.\",\r\n    \"note\": \"This is an upate of the previously reported situation.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{incident_registration_address}}/admin",
+									"host": [
+										"{{incident_registration_address}}"
+									],
+									"path": [
+										"admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update_or_validate_incident_details",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"68010bba13396dfecfd14898\",\r\n    \"category\": \"Health & Safety Alerts\",\r\n    \"severity\": \"LOW\",\r\n    \"areaRadius\": 2,\r\n    \"longitude\": -122.4194,\r\n    \"latitude\": 37.7749,\r\n    \"description\": \"An accident happened here and it's important\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{incident_registration_address}}/admin",
+									"host": [
+										"{{incident_registration_address}}"
+									],
+									"path": [
+										"admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_registered_incident",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{admin_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{incident_registration_address}}/admin/68010952ec613a2ab31af8d4",
+									"host": [
+										"{{incident_registration_address}}"
+									],
+									"path": [
+										"admin",
+										"68010952ec613a2ab31af8d4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User endpoints",
+					"item": [
+						{
+							"name": "register_new_incident",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category\": \"Health & Safety Alerts\",\r\n    \"userToReport\": \"d9UcorlBTWS6cXQLbjam3X:APA91bFUPKrAnRoEvpBc7aj_J5dQUfvtHoot9EAKwS7AuAVXsNkOU6qh_AGORVTHCN5kPl_6Z_eIYB5WOyOGgLWvtH7jqFkH2BMNrCb7aRJQrvyy0czaox4\",\r\n    \"description\": \"Something dangerous is happenning.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{incident_registration_address}}/user",
+									"host": [
+										"{{incident_registration_address}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

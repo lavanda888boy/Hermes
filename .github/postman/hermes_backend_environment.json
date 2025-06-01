@@ -1,0 +1,39 @@
+{
+	"id": "9e5708f7-2e7a-4013-86e4-e1d3751a4b24",
+	"name": "HermesEnvironment",
+	"values": [
+		{
+			"key": "notification_preferences_address",
+			"value": "http://localhost:5008/notification-preferences",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "gps_location_tracking_address",
+			"value": "http://localhost:5008/gps-tracking",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "admin_authentication_address",
+			"value": "http://localhost:5101",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "incident_registration_address",
+			"value": "http://localhost:5008/incident-registration",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "admin_token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTc0MzY3NDE1MSwiaXNzIjoiSGVybWVzQmFja2VuZCIsImF1ZCI6Ikhlcm1lc01vYmlsZUFwcCJ9.E7HZj5tvX2E9bxgGtkCfxEd3EKnVu4EEbtkCEswPuaY",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-06-01T19:33:17.114Z",
+	"_postman_exported_using": "Postman/11.46.0"
+}
