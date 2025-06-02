@@ -69,8 +69,9 @@ JWT_AUDIENCE=HermesMobileApp
 JWT_LIFETIME_MINUTES=30
 ```
 
-All of the secrets are required only by the **IncidentRegistrationService** and **AdminAuthnticationService**. The **NotificationPreferencesService** only needs to contain the MongoDb connection data. This file should be placed at the root of each service directory.
+All of the secrets are required only by the **IncidentRegistrationService** and **AdminAuthnticationService**. The **NotificationPreferencesService** only needs to contain the MongoDb connection data. This file should be placed at the root of each service directory. 
 
+In addition to the `.env` file you should provide the **IncidentRegistrationService** with the `hermes-firebase-adminsdk.json` file. For that you need to create a Firebase project and proceed as described in the official documentation: https://firebase.google.com/docs/admin/setup#c. Finally, place the downloaded JSON file into the `IncidentRegistrationService` folder under the name `hermes-firebase-adminsdk.json`.
 
 1. Once you are finished with the previous steps run the following command from the `ServerBackend` folder (or open the `ServerBackend` solution in Visual Studio):
 
@@ -82,15 +83,17 @@ All of the secrets are required only by the **IncidentRegistrationService** and 
 
 #### Mobile Client
 
-In order to test the Expo mobile client you need to add files with secrets to the root of the `MobileFrontend` directory. The general appearance of a `.env` file is the following (do not forget that the ip address of the .NET Aspire app should be without `localhost` in case of local development, but instead 192.168....):
+In order to test the Expo mobile client you need to add files with secrets to the root of the `MobileFrontend` directory. The general appearance of a `.env` file is the following (do not forget that the ip address of the .NET Aspire app gateway should be without `localhost` in case of local development, but instead 192.168....):
 
 ```env
-API_GATEWAY_URL=<<ip_address_of_the_.net_aspire_app>>
+API_GATEWAY_URL=<<gateway_ip_address>>
 LOCATION_TRACKING_TASK=location-tracking
 LOCATION_TRACKING_TIME_INTERVAL=15000
 LOCATION_TRACKING_DISTANCE_INTERVAL=100
 NOTIFICATION_BUFFER_SIZE=20
 ```
+
+The mobile client just like the server backend also requires a special JSON file `google-services.json` with Firebase secrets. The steps to obtain it are described in the documentation: https://firebase.google.com/docs/android/setup. Remember, that you just need to download the file and place it into the `MobileFrontend` directory. Moreover, the `Android Package name` mentioned in the docs can be found in the Expo `app.json` file, now it has the value `com.project_alpha.hermes`.
 
 1. Once all the files are prepared you can open the `/android/app` folder in Android Studio, build and run it as a project. 
 
@@ -113,3 +116,7 @@ The output of the last command will show you the Metro Server url and the qr cod
    ```
    
 2. By default the Angular web page will be available at `http://localhost:4200`
+
+## Demo
+
+## Further Steps
