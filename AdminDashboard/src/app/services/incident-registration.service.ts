@@ -51,8 +51,7 @@ export class IncidentRegistrationService {
 
     this.http.get<Incident[]>(this.apiUrl, { params: params }).subscribe({
       next: (data) => {
-        const sorted = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-        this.reportedIncidentsSource.next(sorted);
+        this.reportedIncidentsSource.next(data.reverse());
       },
       error: (error) => {
         console.error(error);
@@ -69,8 +68,7 @@ export class IncidentRegistrationService {
 
     this.http.get<Incident[]>(this.apiUrl, { params: params }).subscribe({
       next: (data) => {
-        const sorted = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-        this.validIncidentsSource.next(sorted);
+        this.validIncidentsSource.next(data.reverse());
       },
       error: (error) => {
         console.error(error);
@@ -109,7 +107,7 @@ export class IncidentRegistrationService {
         const updatedReportedIncidents = currentIncidents.filter(inc => inc.id !== incident.id);
 
         this.reportedIncidentsSource.next(updatedReportedIncidents);
-        this.validIncidentsSource.next([...this.validIncidentsSource.getValue(), incident]);
+        this.validIncidentsSource.next([incident, ...this.validIncidentsSource.getValue()]);
       },
       error: (error) => {
         console.error(error);

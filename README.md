@@ -119,6 +119,14 @@ The output of the last command will show you the Metro Server url and the qr cod
 
 ## Demo
 
+Below are presented the two demo gifs of the system workflow. The first one demonstrates the initial setup of the mobile application and basic interaction with it.
+
+![MobileDemo](./.github/gifs/mobile_demo.gif)
+
+And the second one shows the process of reporting and validating the incident both by the user and the admin.
+
+![FullDemo](./.github/gifs/full_demo.gif)
+
 ## Further Steps
 
 Obviously, the Hermes project cannot be called "completed" and it has certain areas which can be improved. First of all, its modules the backend is not deployed and the mobile app does not have an apk. I tried to use the **EAS Build Tool** from Expo but came across the connectivity problems (the mobile app could not reach local backend server). Secondly, it is possible to enhance the backend with additional infrastructural components, like a circuit breaker, for instance, to increase system reliability and availability. Finally, the current idea of an "Administrator" who reports various incidents is artificial and realistically the system should collect incident data from multiple APIs and aggregate it in a certain way. However, this is a little bit beyond the scope of this project and can be developed as a separate ssystem which can be later integrated into Hermes.
