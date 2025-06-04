@@ -121,7 +121,9 @@ The output of the last command will show you the Metro Server url and the qr cod
 
 Below are presented the two demo gifs of the system workflow. The first one demonstrates the initial setup of the mobile application and basic interaction with it.
 
-![MobileDemo](./.github/gifs/mobile_demo.gif)
+<p align="center">
+   <img src="./.github/gifs/mobile_demo.gif" alt="MobileDemo" height="800px" />
+</p>
 
 And the second one shows the process of reporting and validating the incident both by the user and the admin.
 
